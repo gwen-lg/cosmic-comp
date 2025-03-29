@@ -1720,8 +1720,7 @@ impl TilingLayout {
                                 let old_id = tree
                                     .children_ids(&next_child_id)
                                     .unwrap()
-                                    .skip(group_len / 2)
-                                    .next()
+                                    .nth(group_len / 2)
                                     .unwrap()
                                     .clone();
                                 TilingLayout::new_group(
@@ -1919,13 +1918,13 @@ impl TilingLayout {
                 | (Orientation::Vertical, FocusDirection::Right)
                     if idx < (len - 1) =>
                 {
-                    tree.children_ids(group).unwrap().skip(idx + 1).next()
+                    tree.children_ids(group).unwrap().nth(idx + 1)
                 }
                 (Orientation::Horizontal, FocusDirection::Up)
                 | (Orientation::Vertical, FocusDirection::Left)
                     if idx > 0 =>
                 {
-                    tree.children_ids(group).unwrap().skip(idx - 1).next()
+                    tree.children_ids(group).unwrap().nth(idx - 1)
                 }
                 _ => None, // continue iterating
             };
@@ -3280,8 +3279,7 @@ impl TilingLayout {
                             + tree
                                 .children(&id)
                                 .unwrap()
-                                .skip(idx)
-                                .next()
+                                .nth(idx)
                                 .map(|node| {
                                     let geo = node.data().geometry();
                                     geo.loc + geo.size
