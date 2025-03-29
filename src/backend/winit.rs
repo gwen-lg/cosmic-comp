@@ -136,7 +136,7 @@ pub fn init_backend(
     state: &mut State,
 ) -> Result<()> {
     let (mut backend, mut input): (WinitGraphicsBackend<GlowRenderer>, _) =
-        winit::init().map_err(|e| anyhow!("Failed to initilize winit backend: {e:?}"))?;
+        winit::init().map_err(|e| anyhow!("Failed to initialize winit backend: {e:?}"))?;
     init_shaders(backend.renderer().borrow_mut()).context("Failed to initialize renderer")?;
 
     init_egl_client_side(dh, state, &mut backend)?;
