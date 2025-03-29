@@ -131,7 +131,7 @@ impl Devices {
 
         let mut map = self.capabilities.borrow_mut();
         map.remove(&id)
-            .unwrap_or(Vec::new())
+            .unwrap_or_default()
             .into_iter()
             .filter(|c| map.values().flatten().all(|has| *c != *has))
             .collect()

@@ -81,7 +81,7 @@ pub fn ready(common: &Common) -> Result<()> {
                 .xwayland_state
                 .as_ref()
                 .map(|s| format!(":{}", s.display))
-                .unwrap_or(String::new()),
+                .unwrap_or_default(),
         ),
     ]))?;
 
