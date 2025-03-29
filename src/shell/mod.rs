@@ -2320,12 +2320,15 @@ impl Shell {
 
         if let Some((mapped, layer, previous_workspace)) = workspace.remove_fullscreen() {
             let old_handle = workspace.handle;
-            let new_workspace_handle = self
+            let new_workspace_handle = if self
                 .workspaces
                 .space_for_handle(&previous_workspace)
                 .is_some()
-                .then_some(previous_workspace)
-                .unwrap_or(old_handle);
+            {
+                previous_workspace
+            } else {
+                old_handle
+            };
 
             self.remap_unfullscreened_window(mapped, &old_handle, &new_workspace_handle, layer);
         };
@@ -2615,12 +2618,15 @@ impl Shell {
                 if let Some((mapped, layer, previous_workspace)) = to_workspace.remove_fullscreen()
                 {
                     let old_handle = *to;
-                    let new_workspace_handle = self
+                    let new_workspace_handle = if self
                         .workspaces
                         .space_for_handle(&previous_workspace)
                         .is_some()
-                        .then_some(previous_workspace)
-                        .unwrap_or(old_handle);
+                    {
+                        previous_workspace
+                    } else {
+                        old_handle
+                    };
 
                     self.remap_unfullscreened_window(
                         mapped,
@@ -3030,7 +3036,7 @@ impl Shell {
                 None
             };
 
-            let layer = if mapped == old_mapped {
+            let want_tiling = if mapped == old_mapped {
                 let was_floating = workspace.floating_layer.unmap(&mapped);
                 let was_tiled = workspace.tiling_layer.unmap_as_placeholder(&mapped);
                 assert!(was_floating.is_some() != was_tiled.is_some());
@@ -3043,9 +3049,12 @@ impl Shell {
                     .tiling_layer
                     .mapped()
                     .any(|(m, _)| m == &old_mapped)
-            }
-            .then_some(ManagedLayer::Tiling)
-            .unwrap_or(ManagedLayer::Floating);
+            };
+            let layer = if want_tiling {
+                ManagedLayer::Tiling
+            } else {
+                ManagedLayer::Floating
+            };
 
             // if this changed the width, the window was tiled in floating mode
             if let Some(new_size) = new_size {

@@ -382,12 +382,15 @@ impl XdgShellHandler for State {
                     .unwrap();
                 if let Some((layer, previous_workspace)) = workspace.unfullscreen_request(&window) {
                     let old_handle = workspace.handle;
-                    let new_workspace_handle = shell
+                    let new_workspace_handle = if shell
                         .workspaces
                         .space_for_handle(&previous_workspace)
                         .is_some()
-                        .then_some(previous_workspace)
-                        .unwrap_or(old_handle); // if the workspace doesn't exist anymore, we can still remap on the right layer
+                    {
+                        previous_workspace
+                    } else {
+                        old_handle
+                    }; // if the workspace doesn't exist anymore, we can still remap on the right layer
 
                     shell.remap_unfullscreened_window(
                         mapped,
