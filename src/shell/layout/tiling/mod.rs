@@ -3790,44 +3790,40 @@ impl TilingLayout {
 
     pub fn mapped(&self) -> impl Iterator<Item = (&CosmicMapped, Rectangle<i32, Local>)> {
         let tree = &self.queue.trees.back().unwrap().0;
-        let iter = if let Some(root) = tree.root_node_id() {
-            Some(
-                tree.traverse_pre_order(root)
-                    .unwrap()
-                    .filter(|node| node.data().is_mapped(None))
-                    .filter(|node| match node.data() {
-                        Data::Mapped { mapped, .. } => mapped.is_activated(false),
-                        _ => unreachable!(),
-                    })
-                    .map(|node| match node.data() {
-                        Data::Mapped {
-                            mapped,
-                            last_geometry,
-                            ..
-                        } => (mapped, *last_geometry),
-                        _ => unreachable!(),
-                    })
-                    .chain(
-                        tree.traverse_pre_order(root)
-                            .unwrap()
-                            .filter(|node| node.data().is_mapped(None))
-                            .filter(|node| match node.data() {
-                                Data::Mapped { mapped, .. } => !mapped.is_activated(false),
-                                _ => unreachable!(),
-                            })
-                            .map(|node| match node.data() {
-                                Data::Mapped {
-                                    mapped,
-                                    last_geometry,
-                                    ..
-                                } => (mapped, *last_geometry),
-                                _ => unreachable!(),
-                            }),
-                    ),
-            )
-        } else {
-            None
-        };
+        let iter = tree.root_node_id().map(|root| {
+            tree.traverse_pre_order(root)
+                .unwrap()
+                .filter(|node| node.data().is_mapped(None))
+                .filter(|node| match node.data() {
+                    Data::Mapped { mapped, .. } => mapped.is_activated(false),
+                    _ => unreachable!(),
+                })
+                .map(|node| match node.data() {
+                    Data::Mapped {
+                        mapped,
+                        last_geometry,
+                        ..
+                    } => (mapped, *last_geometry),
+                    _ => unreachable!(),
+                })
+                .chain(
+                    tree.traverse_pre_order(root)
+                        .unwrap()
+                        .filter(|node| node.data().is_mapped(None))
+                        .filter(|node| match node.data() {
+                            Data::Mapped { mapped, .. } => !mapped.is_activated(false),
+                            _ => unreachable!(),
+                        })
+                        .map(|node| match node.data() {
+                            Data::Mapped {
+                                mapped,
+                                last_geometry,
+                                ..
+                            } => (mapped, *last_geometry),
+                            _ => unreachable!(),
+                        }),
+                )
+        });
         iter.into_iter().flatten()
     }
 
@@ -4296,11 +4292,9 @@ where
                 .and_then(|target| TilingLayout::currently_focused_node(tree, target))
         })
         .map(|(id, _)| id);
-    let focused_geo = if let Some(focused_id) = focused.as_ref() {
-        Some(*tree.get(focused_id).unwrap().data().geometry())
-    } else {
-        None
-    };
+    let focused_geo = focused
+        .as_ref()
+        .map(|focused_id| *tree.get(focused_id).unwrap().data().geometry());
 
     let has_potential_groups = if let Some(focused_id) = focused.as_ref() {
         let focused_node = tree.get(focused_id).unwrap();
