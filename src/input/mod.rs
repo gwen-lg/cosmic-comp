@@ -854,7 +854,7 @@ impl State {
                                 percentage *= 5.;
                             }
 
-                            let change = -(percentage as f64 / 100.);
+                            let change = -(percentage / 100.);
                             self.update_zoom(&seat, change, event.source() == AxisSource::Wheel);
                         }
                     } else {
@@ -1503,12 +1503,9 @@ impl State {
                 .unwrap_or(false)
         });
 
-        self.common.atspi_ei.input(
-            modifiers,
-            &handle,
-            event.state(),
-            event.time() as u64 * 1000,
-        );
+        self.common
+            .atspi_ei
+            .input(modifiers, &handle, event.state(), event.time() * 1000);
 
         // Leave move overview mode, if any modifier was released
         if let Some(Trigger::KeyboardMove(action_modifiers)) =

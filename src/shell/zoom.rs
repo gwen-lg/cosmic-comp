@@ -92,12 +92,12 @@ impl OutputZoomState {
                         .upscale(level)
                         .to_global(output);
                     focal_point.x = focal_point.x.clamp(
-                        output_geometry.loc.x as f64,
-                        ((output_geometry.loc.x + output_geometry.size.w) as f64).next_lower(), // FIXME: Replace with f64::next_down when stable
+                        output_geometry.loc.x,
+                        (output_geometry.loc.x + output_geometry.size.w).next_lower(), // FIXME: Replace with f64::next_down when stable
                     );
                     focal_point.y = focal_point.y.clamp(
-                        output_geometry.loc.y as f64,
-                        ((output_geometry.loc.y + output_geometry.size.h) as f64).next_lower(), // FIXME: Replace with f64::next_down when stable
+                        output_geometry.loc.y,
+                        (output_geometry.loc.y + output_geometry.size.h).next_lower(), // FIXME: Replace with f64::next_down when stable
                     );
                     focal_point.to_local(output)
                 }
