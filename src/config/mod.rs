@@ -668,7 +668,7 @@ impl Config {
                 )
             })
             .collect::<Vec<(OutputInfo, OutputConfig)>>();
-        infos.sort_by(|&(ref a, _), &(ref b, _)| a.cmp(b));
+        infos.sort_by(|(a, _), (b, _)| a.cmp(b));
         let (infos, configs) = infos.into_iter().unzip();
         self.dynamic_conf
             .outputs_mut()

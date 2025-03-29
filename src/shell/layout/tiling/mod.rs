@@ -1890,7 +1890,7 @@ impl TilingLayout {
                     WindowGroup {
                         node: group.clone(),
                         alive: match group_data {
-                            &Data::Group { ref alive, .. } => Arc::downgrade(alive),
+                            Data::Group { alive, .. } => Arc::downgrade(alive),
                             _ => unreachable!(),
                         },
                         focus_stack: match data {
