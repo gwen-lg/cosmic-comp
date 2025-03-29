@@ -275,13 +275,12 @@ where
                     .heads
                     .iter_mut()
                     .map(|(head, conf)| {
-                        let output = match {
-                            inner
-                                .instances
-                                .iter()
-                                .find_map(|instance| instance.heads.iter().find(|h| h.obj == *head))
-                                .map(|i| i.output.clone())
-                        } {
+                        let output = match inner
+                            .instances
+                            .iter()
+                            .find_map(|instance| instance.heads.iter().find(|h| h.obj == *head))
+                            .map(|i| i.output.clone())
+                        {
                             Some(o) => o,
                             None => {
                                 return Err(zwlr_output_configuration_head_v1::Error::InvalidMode);
