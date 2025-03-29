@@ -679,7 +679,7 @@ impl TilingLayout {
 
                 mapped.set_tiled(true);
                 other.map(mapped.clone(), Some(focus_stack), direction);
-                return Some(KeyboardFocusTarget::Element(mapped));
+                Some(KeyboardFocusTarget::Element(mapped))
             }
             None => {
                 let node = this_tree.get(&desc.node).ok()?;

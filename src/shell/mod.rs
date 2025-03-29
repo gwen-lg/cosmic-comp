@@ -1646,7 +1646,6 @@ impl Shell {
     pub fn close_focused(&self, focus_target: &KeyboardFocusTarget) {
         if let KeyboardFocusTarget::Group(_group) = focus_target {
             //TODO: decide if we want close actions to apply to groups
-            return;
         } else {
             if let Some(mapped) = self.focused_element(focus_target) {
                 mapped.send_close();

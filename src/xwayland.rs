@@ -130,7 +130,6 @@ impl State {
             Err(err) => {
                 error!(?err, "Failed to listen for Xwayland");
                 self.notify_ready();
-                return;
             }
         }
     }

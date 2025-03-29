@@ -842,7 +842,7 @@ impl SurfaceThreadState {
                     warn!(?name, "Failed to submit rendering: {:?}", err);
                     state.queue_redraw(true);
                 }
-                return TimeoutAction::Drop;
+                TimeoutAction::Drop
             })
             .expect("Failed to schedule render");
 
