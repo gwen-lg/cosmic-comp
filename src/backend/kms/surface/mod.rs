@@ -1825,7 +1825,7 @@ fn get_surface_dmabuf_feedback(
                 FormatSet::from_iter(
                     primary_plane_formats
                         .into_iter()
-                        .chain(overlay_plane_formats.into_iter()),
+                        .chain(overlay_plane_formats),
                 ),
             )
             .build()

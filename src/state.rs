@@ -343,7 +343,7 @@ impl BackendData {
                 Some(c_m) => m.size != c_m.size || m.refresh != c_m.refresh,
             });
             let transform =
-                Some(final_config.transform.into()).filter(|x| *x != output.current_transform());
+                Some(final_config.transform).filter(|x| *x != output.current_transform());
             let scale = Some(final_config.scale)
                 .filter(|x| *x != output.current_scale().fractional_scale());
             let location = Some(Point::from((

@@ -403,7 +403,7 @@ impl Element for DamageElement {
         scale: Scale<f64>,
         _commit: Option<CommitCounter>,
     ) -> DamageSet<i32, Physical> {
-        DamageSet::from_slice(&[Rectangle::from_size(self.geometry(scale).size).into()])
+        DamageSet::from_slice(&[Rectangle::from_size(self.geometry(scale).size)])
     }
 }
 

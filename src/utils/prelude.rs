@@ -1,7 +1,7 @@
 use smithay::{
     backend::drm::VrrSupport as Support,
     output::{Output, WeakOutput},
-    utils::{Rectangle, Transform},
+    utils::Rectangle,
 };
 
 pub use super::geometry::*;
@@ -44,7 +44,7 @@ struct Mirroring(Mutex<Option<WeakOutput>>);
 impl OutputExt for Output {
     fn geometry(&self) -> Rectangle<i32, Global> {
         Rectangle::new(self.current_location(), {
-            Transform::from(self.current_transform())
+            self.current_transform()
                 .transform_size(
                     self.current_mode()
                         .map(|m| m.size)

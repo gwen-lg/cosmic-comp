@@ -110,8 +110,8 @@ impl MoveGrabState {
 
         let active_window_hint = crate::theme::active_window_hint(theme);
         let focus_element = if self.indicator_thickness > 0 {
-            Some(
-                CosmicMappedRenderElement::from(IndicatorShader::focus_element(
+            Some(CosmicMappedRenderElement::from(
+                IndicatorShader::focus_element(
                     renderer,
                     Key::Window(Usage::MoveGrabIndicator, self.window.key()),
                     Rectangle::new(
@@ -131,9 +131,8 @@ impl MoveGrabState {
                         active_window_hint.green,
                         active_window_hint.blue,
                     ],
-                ))
-                .into(),
-            )
+                ),
+            ))
         } else {
             None
         };
@@ -163,8 +162,7 @@ impl MoveGrabState {
                             active_window_hint.green,
                             active_window_hint.blue,
                         ],
-                    ))
-                    .into(),
+                    )),
                     CosmicMappedRenderElement::from(BackdropShader::element(
                         renderer,
                         Key::Window(Usage::SnappingIndicator, self.window.key()),
@@ -172,8 +170,7 @@ impl MoveGrabState {
                         theme.radius_s()[0], // TODO: Fix once shaders support 4 corner radii customization
                         0.4,
                         [base_color.red, base_color.green, base_color.blue],
-                    ))
-                    .into(),
+                    )),
                 ]
             }
             _ => vec![],

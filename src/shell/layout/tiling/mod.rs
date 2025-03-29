@@ -5065,7 +5065,7 @@ fn render_old_tree(
 
                 let (scale, offset) = scaled_geo
                     .map(|adapted_geo| scale_to_center(original_geo, &adapted_geo))
-                    .unwrap_or_else(|| (1.0.into(), (0, 0).into()));
+                    .unwrap_or_else(|| (1.0, (0, 0).into()));
                 let geo = scaled_geo
                     .map(|adapted_geo| {
                         Rectangle::new(
@@ -5627,7 +5627,7 @@ fn render_new_tree(
                 let (scale, offset) = old_scaled_geo
                     .unwrap()
                     .map(|adapted_geo| scale_to_center(original_geo, adapted_geo))
-                    .unwrap_or_else(|| (1.0.into(), (0, 0).into()));
+                    .unwrap_or_else(|| (1.0, (0, 0).into()));
                 (
                     old_scaled_geo
                         .unwrap()
@@ -5655,7 +5655,7 @@ fn render_new_tree(
 
             let (scale, offset) = scaled_geo
                 .map(|adapted_geo| scale_to_center(original_geo, adapted_geo))
-                .unwrap_or_else(|| (1.0.into(), (0, 0).into()));
+                .unwrap_or_else(|| (1.0, (0, 0).into()));
             let new_geo = scaled_geo
                 .map(|adapted_geo| {
                     Rectangle::new(

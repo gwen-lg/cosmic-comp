@@ -2224,7 +2224,7 @@ fn cursor_sessions_for_output<'a>(
                         .into_iter()
                         .flatten(),
                 )
-                .chain(output.cursor_sessions().into_iter())
+                .chain(output.cursor_sessions())
         })
 }
 

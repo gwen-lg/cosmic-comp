@@ -749,7 +749,7 @@ where
     let crop_to_output = |element: WorkspaceRenderElement<R>| {
         CropRenderElement::from_element(
             RescaleRenderElement::from_element(
-                element.into(),
+                element,
                 focal_point
                     .as_logical()
                     .to_physical(output.current_scale().fractional_scale())
