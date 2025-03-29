@@ -586,7 +586,7 @@ pub fn render_window_to_buffer(
                     .and_then(|wl_surface| {
                         with_renderer_surface_state(&wl_surface, |state| {
                             let buffer = state.buffer()?;
-                            let dmabuf = get_dmabuf(&*buffer).ok()?;
+                            let dmabuf = get_dmabuf(buffer).ok()?;
                             dmabuf.node()
                         })
                     })

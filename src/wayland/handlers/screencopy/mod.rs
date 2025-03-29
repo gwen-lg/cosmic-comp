@@ -368,7 +368,7 @@ fn constraints_for_toplevel(
         .offscreen_renderer(|kms| {
             let dma_node = with_renderer_surface_state(&wl_surface, |state| {
                 let buffer = state.buffer()?;
-                let dmabuf = get_dmabuf(&*buffer).ok()?;
+                let dmabuf = get_dmabuf(buffer).ok()?;
                 dmabuf.node()
             })
             .flatten();

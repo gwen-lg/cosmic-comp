@@ -431,7 +431,7 @@ where
                     .map(|c| c == output_mode)
                     .unwrap_or(false)
             {
-                instance.obj.current_mode(&*mode);
+                instance.obj.current_mode(mode);
             }
         }
     }
