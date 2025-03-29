@@ -382,14 +382,12 @@ where
         _state: &mut D,
         _client: &Client,
         _resource: &ZcosmicImageSourceV1,
-        request: <ZcosmicImageSourceV1 as Resource>::Request,
+        _request: <ZcosmicImageSourceV1 as Resource>::Request,
         _data: &ImageSourceData,
         _dhandle: &DisplayHandle,
         _data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            _ => {}
-        }
+        {}
     }
 
     fn destroyed(

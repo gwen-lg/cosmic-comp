@@ -453,14 +453,12 @@ where
         _state: &mut D,
         _client: &Client,
         _resource: &ZcosmicOverlapNotificationV1,
-        request: <ZcosmicOverlapNotificationV1 as Resource>::Request,
+        _request: <ZcosmicOverlapNotificationV1 as Resource>::Request,
         _data: &(),
         _dhandle: &DisplayHandle,
         _data_init: &mut smithay::reexports::wayland_server::DataInit<'_, D>,
     ) {
-        match request {
-            _ => {}
-        }
+        {}
     }
 }
 
