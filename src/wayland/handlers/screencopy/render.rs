@@ -127,7 +127,7 @@ where
     Ok(Some((
         frame,
         damage
-            .into_iter()
+            .iter()
             .map(|rect| {
                 let logical = rect.to_logical(1);
                 logical.to_buffer(1, transform, &logical.size)

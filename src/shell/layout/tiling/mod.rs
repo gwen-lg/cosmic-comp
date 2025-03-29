@@ -685,7 +685,7 @@ impl TilingLayout {
                 let node = this_tree.get(&desc.node).ok()?;
                 let mut children = node
                     .children()
-                    .into_iter()
+                    .iter()
                     .map(|child_id| (desc.node.clone(), child_id.clone()))
                     .collect::<Vec<_>>();
                 let node = Node::new(node.data().clone());
@@ -907,12 +907,12 @@ impl TilingLayout {
                 // swap children
                 let mut this_children = this_node
                     .children()
-                    .into_iter()
+                    .iter()
                     .map(|child_id| (other_desc.node.clone(), child_id.clone()))
                     .collect::<Vec<_>>();
                 let mut other_children = other_node
                     .children()
-                    .into_iter()
+                    .iter()
                     .map(|child_id| (this_desc.node.clone(), child_id.clone()))
                     .collect::<Vec<_>>();
 
