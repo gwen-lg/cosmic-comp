@@ -1282,7 +1282,7 @@ impl Workspace {
             .unwrap_or(true)
         {
             let focused = draw_focus_indicator
-                .filter(|_| !self.fullscreen.is_some())
+                .filter(|_| self.fullscreen.is_none())
                 .and_then(|seat| self.focus_stack.get(seat).last().cloned());
 
             // floating surfaces

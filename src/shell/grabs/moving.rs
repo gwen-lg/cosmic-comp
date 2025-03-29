@@ -92,11 +92,11 @@ impl MoveGrabState {
 
         let mut window_geo = self.window.geometry();
         window_geo.loc += self.location.to_i32_round() + self.window_offset;
-        if !output
+        if output
             .geometry()
             .as_logical()
             .intersection(window_geo)
-            .is_some()
+            .is_none()
         {
             return Vec::new();
         }
