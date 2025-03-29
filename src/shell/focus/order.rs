@@ -341,11 +341,11 @@ fn render_input_order_internal<R: 'static>(
     ControlFlow::Continue(())
 }
 
-fn layer_popups<'a>(
-    output: &'a Output,
+fn layer_popups(
+    output: &Output,
     layer: Layer,
     element_filter: ElementFilter,
-) -> impl Iterator<Item = (LayerSurface, PopupKind, Point<i32, Global>)> + 'a {
+) -> impl Iterator<Item = (LayerSurface, PopupKind, Point<i32, Global>)> + '_ {
     layer_surfaces(output, layer, element_filter).flat_map(move |(surface, location)| {
         let location_clone = location;
         let surface_clone = surface.clone();
@@ -356,11 +356,11 @@ fn layer_popups<'a>(
     })
 }
 
-fn layer_surfaces<'a>(
-    output: &'a Output,
+fn layer_surfaces(
+    output: &Output,
     layer: Layer,
     element_filter: ElementFilter,
-) -> impl Iterator<Item = (LayerSurface, Point<i32, Global>)> + 'a {
+) -> impl Iterator<Item = (LayerSurface, Point<i32, Global>)> + '_ {
     // we want to avoid deadlocks on the layer-map in callbacks, so we need to clone the layer surfaces
     let layers = {
         let layer_map = layer_map_for_output(output);
