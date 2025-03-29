@@ -3786,9 +3786,7 @@ impl Shell {
 
     #[must_use]
     pub fn toggle_stacking_focused(&mut self, seat: &Seat<State>) -> Option<KeyboardFocusTarget> {
-        let Some(focused_output) = seat.focused_output() else {
-            return None;
-        };
+        let focused_output = seat.focused_output()?;
         let set = self.workspaces.sets.get_mut(&focused_output).unwrap();
         let workspace = &mut set.workspaces[set.active];
         let maybe_window = workspace.focus_stack.get(seat).iter().next().cloned();

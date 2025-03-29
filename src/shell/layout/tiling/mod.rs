@@ -2110,9 +2110,7 @@ impl TilingLayout {
     ) -> Option<KeyboardFocusTarget> {
         let gaps = self.gaps();
 
-        let Some(node_id) = mapped.tiling_node_id.lock().unwrap().clone() else {
-            return None;
-        };
+        let node_id = mapped.tiling_node_id.lock().unwrap().clone()?;
 
         let mut tree = self.queue.trees.back().unwrap().0.copy_clone();
         if tree.get(&node_id).is_err() {
@@ -2226,10 +2224,7 @@ impl TilingLayout {
         mut focus_stack: FocusStackMut,
     ) -> Option<KeyboardFocusTarget> {
         let gaps = self.gaps();
-
-        let Some(target) = seat.get_keyboard().unwrap().current_focus() else {
-            return None;
-        };
+        let target = seat.get_keyboard().unwrap().current_focus()?;
 
         let mut tree = self.queue.trees.back().unwrap().0.copy_clone();
         if let Some((last_active, last_active_data)) =
