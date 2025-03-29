@@ -655,25 +655,22 @@ where
         _dhandle: &DisplayHandle,
         data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zcosmic_screencopy_session_v2::Request::CreateFrame { frame } => {
-                let inner = Arc::new(Mutex::new(FrameInner::new(
-                    resource.clone(),
-                    data.inner.lock().unwrap().constraints.clone(),
-                )));
-                let obj = data_init.init(
-                    frame,
-                    FrameData {
-                        inner: inner.clone(),
-                    },
-                );
-                data.inner
-                    .lock()
-                    .unwrap()
-                    .active_frames
-                    .push(Frame { obj, inner });
-            }
-            _ => {}
+        if let zcosmic_screencopy_session_v2::Request::CreateFrame { frame } = request {
+            let inner = Arc::new(Mutex::new(FrameInner::new(
+                resource.clone(),
+                data.inner.lock().unwrap().constraints.clone(),
+            )));
+            let obj = data_init.init(
+                frame,
+                FrameData {
+                    inner: inner.clone(),
+                },
+            );
+            data.inner
+                .lock()
+                .unwrap()
+                .active_frames
+                .push(Frame { obj, inner });
         }
     }
 
@@ -712,45 +709,44 @@ where
         _dhandle: &DisplayHandle,
         data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zcosmic_screencopy_cursor_session_v2::Request::GetScreencopySession { session } => {
-                let new_data = CursorSessionData {
-                    inner: data.inner.clone(),
-                };
-                let session = data_init.init(session, new_data);
+        if let zcosmic_screencopy_cursor_session_v2::Request::GetScreencopySession { session } =
+            request
+        {
+            let new_data = CursorSessionData {
+                inner: data.inner.clone(),
+            };
+            let session = data_init.init(session, new_data);
 
-                let mut inner = data.inner.lock().unwrap();
-                if inner.session.is_some() {
-                    resource.post_error(
-                        zcosmic_screencopy_cursor_session_v2::Error::DuplicateSession,
-                        "Duplicate session",
-                    );
-                    return;
-                }
-
-                if inner.stopped {
-                    session.stopped();
-                } else if let Some(constraints) = inner.constraints.as_ref() {
-                    session.buffer_size(constraints.size.w as u32, constraints.size.h as u32);
-                    for fmt in &constraints.shm {
-                        session.shm_format(*fmt as u32);
-                    }
-                    if let Some(dma) = constraints.dma.as_ref() {
-                        let node = Vec::from(dma.node.dev_id().to_ne_bytes());
-                        session.dmabuf_device(node);
-                        for (fmt, modifiers) in &dma.formats {
-                            let modifiers = modifiers
-                                .iter()
-                                .flat_map(|modifier| u64::from(*modifier).to_ne_bytes())
-                                .collect::<Vec<u8>>();
-                            session.dmabuf_format(*fmt as u32, modifiers);
-                        }
-                    }
-                    session.done();
-                }
-                inner.session = Some(session);
+            let mut inner = data.inner.lock().unwrap();
+            if inner.session.is_some() {
+                resource.post_error(
+                    zcosmic_screencopy_cursor_session_v2::Error::DuplicateSession,
+                    "Duplicate session",
+                );
+                return;
             }
-            _ => {}
+
+            if inner.stopped {
+                session.stopped();
+            } else if let Some(constraints) = inner.constraints.as_ref() {
+                session.buffer_size(constraints.size.w as u32, constraints.size.h as u32);
+                for fmt in &constraints.shm {
+                    session.shm_format(*fmt as u32);
+                }
+                if let Some(dma) = constraints.dma.as_ref() {
+                    let node = Vec::from(dma.node.dev_id().to_ne_bytes());
+                    session.dmabuf_device(node);
+                    for (fmt, modifiers) in &dma.formats {
+                        let modifiers = modifiers
+                            .iter()
+                            .flat_map(|modifier| u64::from(*modifier).to_ne_bytes())
+                            .collect::<Vec<u8>>();
+                        session.dmabuf_format(*fmt as u32, modifiers);
+                    }
+                }
+                session.done();
+            }
+            inner.session = Some(session);
         }
     }
 
@@ -788,25 +784,22 @@ where
         _dhandle: &DisplayHandle,
         data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zcosmic_screencopy_session_v2::Request::CreateFrame { frame } => {
-                let inner = Arc::new(Mutex::new(FrameInner::new(
-                    resource.clone(),
-                    data.inner.lock().unwrap().constraints.clone(),
-                )));
-                let obj = data_init.init(
-                    frame,
-                    FrameData {
-                        inner: inner.clone(),
-                    },
-                );
-                data.inner
-                    .lock()
-                    .unwrap()
-                    .active_frames
-                    .push(Frame { obj, inner });
-            }
-            _ => {}
+        if let zcosmic_screencopy_session_v2::Request::CreateFrame { frame } = request {
+            let inner = Arc::new(Mutex::new(FrameInner::new(
+                resource.clone(),
+                data.inner.lock().unwrap().constraints.clone(),
+            )));
+            let obj = data_init.init(
+                frame,
+                FrameData {
+                    inner: inner.clone(),
+                },
+            );
+            data.inner
+                .lock()
+                .unwrap()
+                .active_frames
+                .push(Frame { obj, inner });
         }
     }
 

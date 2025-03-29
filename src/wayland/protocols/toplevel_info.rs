@@ -246,10 +246,7 @@ where
         _dh: &DisplayHandle,
         _data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zcosmic_toplevel_handle_v1::Request::Destroy => {}
-            _ => {}
-        }
+        if let zcosmic_toplevel_handle_v1::Request::Destroy = request {}
     }
 
     fn destroyed(

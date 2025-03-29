@@ -1445,31 +1445,25 @@ impl Shell {
                         set.workspaces[set.active].tiling_layer.cleanup_drag();
                     }
                     if let Some((_, workspace_delta)) = set.previously_active {
-                        match workspace_delta {
-                            WorkspaceDelta::Gesture(delta) => {
-                                if (velocity > 0.0 && velocity.abs() >= GESTURE_VELOCITY_THRESHOLD)
-                                    || (velocity.abs() < GESTURE_VELOCITY_THRESHOLD
-                                        && delta.abs() > GESTURE_POSITION_THRESHOLD)
-                                {
-                                    set.activate(
-                                        set.active,
-                                        WorkspaceDelta::new_gesture_end(
-                                            delta.abs(),
-                                            velocity.abs(),
-                                        ),
-                                        workspace_state,
-                                    )?;
-                                } else {
-                                    set.activate_previous(
-                                        WorkspaceDelta::new_gesture_end(
-                                            1.0 - delta.abs(),
-                                            velocity.abs(),
-                                        ),
-                                        workspace_state,
-                                    )?;
-                                }
+                        if let WorkspaceDelta::Gesture(delta) = workspace_delta {
+                            if (velocity > 0.0 && velocity.abs() >= GESTURE_VELOCITY_THRESHOLD)
+                                || (velocity.abs() < GESTURE_VELOCITY_THRESHOLD
+                                    && delta.abs() > GESTURE_POSITION_THRESHOLD)
+                            {
+                                set.activate(
+                                    set.active,
+                                    WorkspaceDelta::new_gesture_end(delta.abs(), velocity.abs()),
+                                    workspace_state,
+                                )?;
+                            } else {
+                                set.activate_previous(
+                                    WorkspaceDelta::new_gesture_end(
+                                        1.0 - delta.abs(),
+                                        velocity.abs(),
+                                    ),
+                                    workspace_state,
+                                )?;
                             }
-                            _ => {} // Do nothing
                         }
                     }
 
@@ -1485,31 +1479,25 @@ impl Shell {
             WorkspaceMode::Global => {
                 for set in self.workspaces.sets.values_mut() {
                     if let Some((_, workspace_delta)) = set.previously_active {
-                        match workspace_delta {
-                            WorkspaceDelta::Gesture(delta) => {
-                                if (velocity > 0.0 && velocity.abs() >= GESTURE_VELOCITY_THRESHOLD)
-                                    || (velocity.abs() < GESTURE_VELOCITY_THRESHOLD
-                                        && delta.abs() > GESTURE_POSITION_THRESHOLD)
-                                {
-                                    set.activate(
-                                        set.active,
-                                        WorkspaceDelta::new_gesture_end(
-                                            delta.abs(),
-                                            velocity.abs(),
-                                        ),
-                                        workspace_state,
-                                    )?;
-                                } else {
-                                    set.activate_previous(
-                                        WorkspaceDelta::new_gesture_end(
-                                            1.0 - delta.abs(),
-                                            velocity.abs(),
-                                        ),
-                                        workspace_state,
-                                    )?;
-                                }
+                        if let WorkspaceDelta::Gesture(delta) = workspace_delta {
+                            if (velocity > 0.0 && velocity.abs() >= GESTURE_VELOCITY_THRESHOLD)
+                                || (velocity.abs() < GESTURE_VELOCITY_THRESHOLD
+                                    && delta.abs() > GESTURE_POSITION_THRESHOLD)
+                            {
+                                set.activate(
+                                    set.active,
+                                    WorkspaceDelta::new_gesture_end(delta.abs(), velocity.abs()),
+                                    workspace_state,
+                                )?;
+                            } else {
+                                set.activate_previous(
+                                    WorkspaceDelta::new_gesture_end(
+                                        1.0 - delta.abs(),
+                                        velocity.abs(),
+                                    ),
+                                    workspace_state,
+                                )?;
                             }
-                            _ => {} // Do nothing
                         }
                     }
                 }

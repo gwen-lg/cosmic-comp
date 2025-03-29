@@ -1438,16 +1438,14 @@ impl PointerTarget<State> for CosmicStack {
     }
 
     fn axis(&self, seat: &Seat<State>, data: &mut State, frame: AxisFrame) {
-        match self.0.with_program(|p| p.current_focus()) {
-            Some(Focus::Header) => PointerTarget::axis(&self.0, seat, data, frame),
-            _ => {}
+        if let Some(Focus::Header) = self.0.with_program(|p| p.current_focus()) {
+            PointerTarget::axis(&self.0, seat, data, frame)
         }
     }
 
     fn frame(&self, seat: &Seat<State>, data: &mut State) {
-        match self.0.with_program(|p| p.current_focus()) {
-            Some(Focus::Header) => PointerTarget::frame(&self.0, seat, data),
-            _ => {}
+        if let Some(Focus::Header) = self.0.with_program(|p| p.current_focus()) {
+            PointerTarget::frame(&self.0, seat, data)
         }
     }
 

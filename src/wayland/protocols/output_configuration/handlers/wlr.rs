@@ -136,13 +136,10 @@ where
         _dh: &DisplayHandle,
         _data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zwlr_output_head_v1::Request::Release => {
-                for instance in &mut state.output_configuration_state().instances {
-                    instance.heads.retain(|h| &h.obj != obj);
-                }
+        if let zwlr_output_head_v1::Request::Release = request {
+            for instance in &mut state.output_configuration_state().instances {
+                instance.heads.retain(|h| &h.obj != obj);
             }
-            _ => {}
         }
     }
 
@@ -173,16 +170,13 @@ where
         _dh: &DisplayHandle,
         _data_init: &mut DataInit<'_, D>,
     ) {
-        match request {
-            zwlr_output_mode_v1::Request::Release => {
-                let state = state.output_configuration_state();
-                for instance in &mut state.instances {
-                    for head in &mut instance.heads {
-                        head.modes.retain(|mode| mode != obj)
-                    }
+        if let zwlr_output_mode_v1::Request::Release = request {
+            let state = state.output_configuration_state();
+            for instance in &mut state.instances {
+                for head in &mut instance.heads {
+                    head.modes.retain(|mode| mode != obj)
                 }
             }
-            _ => {}
         }
     }
 }

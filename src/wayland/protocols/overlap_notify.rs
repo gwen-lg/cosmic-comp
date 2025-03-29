@@ -411,22 +411,20 @@ where
         _dhandle: &DisplayHandle,
         data_init: &mut smithay::reexports::wayland_server::DataInit<'_, D>,
     ) {
-        match request {
-            zcosmic_overlap_notify_v1::Request::NotifyOnOverlap {
-                overlap_notification,
-                layer_surface,
-            } => {
-                let notification = data_init.init(overlap_notification, ());
-                if let Some(surface) = state.layer_surface_from_resource(layer_surface) {
-                    let mut data = surface
-                        .user_data()
-                        .get_or_insert_threadsafe(LayerOverlapNotificationData::default)
-                        .lock()
-                        .unwrap();
-                    data.add_notification(notification);
-                }
+        if let zcosmic_overlap_notify_v1::Request::NotifyOnOverlap {
+            overlap_notification,
+            layer_surface,
+        } = request
+        {
+            let notification = data_init.init(overlap_notification, ());
+            if let Some(surface) = state.layer_surface_from_resource(layer_surface) {
+                let mut data = surface
+                    .user_data()
+                    .get_or_insert_threadsafe(LayerOverlapNotificationData::default)
+                    .lock()
+                    .unwrap();
+                data.add_notification(notification);
             }
-            _ => {}
         }
     }
 
