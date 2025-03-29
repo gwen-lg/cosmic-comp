@@ -281,7 +281,7 @@ impl State {
 
                     let mut position = seat.get_pointer().unwrap().current_location().as_global();
 
-                    let under = State::surface_under(position, &current_output, &*shell)
+                    let under = State::surface_under(position, &current_output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     let ptr = seat.get_pointer().unwrap();
@@ -325,7 +325,7 @@ impl State {
                         .cloned()
                         .unwrap_or(current_output.clone());
 
-                    let new_under = State::surface_under(position, &output, &*shell)
+                    let new_under = State::surface_under(position, &output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -359,8 +359,8 @@ impl State {
                     } else if self.common.config.cosmic_conf.focus_follows_cursor {
                         let shell = self.common.shell.read().unwrap();
                         let old_keyboard_target =
-                            State::element_under(original_position, &current_output, &*shell);
-                        let new_keyboard_target = State::element_under(position, &output, &*shell);
+                            State::element_under(original_position, &current_output, &shell);
+                        let new_keyboard_target = State::element_under(position, &output, &shell);
 
                         if old_keyboard_target != new_keyboard_target
                             && new_keyboard_target.is_some()
@@ -535,7 +535,7 @@ impl State {
                     );
 
                     if output != current_output {
-                        for session in cursor_sessions_for_output(&*shell, &current_output) {
+                        for session in cursor_sessions_for_output(&shell, &current_output) {
                             session.set_cursor_pos(None);
                         }
                         seat.set_active_output(&output);
@@ -590,7 +590,7 @@ impl State {
                     let under = State::surface_under(
                         position,
                         &output,
-                        &*self.common.shell.write().unwrap(),
+                        &self.common.shell.write().unwrap(),
                     )
                     .map(|(target, pos)| (target, pos.as_logical()));
 
@@ -607,7 +607,7 @@ impl State {
                     ptr.frame(self);
 
                     let shell = self.common.shell.read().unwrap();
-                    for session in cursor_sessions_for_output(&*shell, &output) {
+                    for session in cursor_sessions_for_output(&shell, &output) {
                         if let Some((geometry, offset)) = seat.cursor_geometry(
                             position.as_logical().to_buffer(
                                 output.current_scale().fractional_scale(),
@@ -1190,7 +1190,7 @@ impl State {
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
-                        mapped_output_for_device(&self.common.config, &*shell, &event.device())
+                        mapped_output_for_device(&self.common.config, &shell, &event.device())
                             .cloned()
                     else {
                         return;
@@ -1198,7 +1198,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &*shell)
+                    let under = State::surface_under(position, &output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1222,7 +1222,7 @@ impl State {
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
-                        mapped_output_for_device(&self.common.config, &*shell, &event.device())
+                        mapped_output_for_device(&self.common.config, &shell, &event.device())
                             .cloned()
                     else {
                         return;
@@ -1230,7 +1230,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &*shell)
+                    let under = State::surface_under(position, &output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1315,7 +1315,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &*shell)
+                    let under = State::surface_under(position, &output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1380,7 +1380,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &*shell)
+                    let under = State::surface_under(position, &output, &shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);

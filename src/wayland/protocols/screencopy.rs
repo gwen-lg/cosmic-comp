@@ -164,7 +164,7 @@ impl Session {
     }
 
     pub fn user_data(&self) -> &UserDataMap {
-        &*self.user_data
+        &self.user_data
     }
 
     pub fn stop(self) {
@@ -315,7 +315,7 @@ impl CursorSession {
     }
 
     pub fn user_data(&self) -> &UserDataMap {
-        &*self.user_data
+        &self.user_data
     }
 
     pub fn stop(self) {

@@ -108,7 +108,7 @@ impl State {
         match action {
             SwipeAction::NextWorkspace => {
                 let _ = to_next_workspace(
-                    &mut *self.common.shell.write().unwrap(),
+                    &mut self.common.shell.write().unwrap(),
                     seat,
                     true,
                     &mut self.common.workspace_state.update(),
@@ -116,7 +116,7 @@ impl State {
             }
             SwipeAction::PrevWorkspace => {
                 let _ = to_previous_workspace(
-                    &mut *self.common.shell.write().unwrap(),
+                    &mut self.common.shell.write().unwrap(),
                     seat,
                     true,
                     &mut self.common.workspace_state.update(),
@@ -206,7 +206,7 @@ impl State {
                 }
 
                 let next = to_next_workspace(
-                    &mut *self.common.shell.write().unwrap(),
+                    &mut self.common.shell.write().unwrap(),
                     seat,
                     false,
                     &mut self.common.workspace_state.update(),
@@ -252,7 +252,7 @@ impl State {
                 }
 
                 let previous = to_previous_workspace(
-                    &mut *self.common.shell.write().unwrap(),
+                    &mut self.common.shell.write().unwrap(),
                     seat,
                     false,
                     &mut self.common.workspace_state.update(),

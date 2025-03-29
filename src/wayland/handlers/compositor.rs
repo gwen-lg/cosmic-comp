@@ -251,7 +251,7 @@ impl CompositorHandler for State {
             if let Some(element) = shell.element_for_surface(surface).cloned() {
                 crate::shell::layout::floating::ResizeSurfaceGrab::apply_resize_to_location(
                     element.clone(),
-                    &mut *shell,
+                    &mut shell,
                 );
             }
         }

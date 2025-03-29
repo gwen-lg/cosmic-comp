@@ -883,7 +883,7 @@ impl SurfaceThreadState {
             self.mirroring.as_ref().unwrap_or(&self.output),
             &self.primary_node,
             &self.target_node,
-            &*self.shell.read().unwrap(),
+            &self.shell.read().unwrap(),
         );
 
         let mut renderer = if render_node != self.target_node {

@@ -137,7 +137,7 @@ pub fn setup_socket(handle: LoopHandle<State>, common: &Common) -> Result<()> {
                                     Ok(Message::NewPrivilegedClient { count }) => {
                                         let mut buffer = [0; 1];
                                         let mut fds = vec![0; count];
-                                        match stream.stream.recv_with_fd(&mut buffer, &mut *fds) {
+                                        match stream.stream.recv_with_fd(&mut buffer, &mut fds) {
                                             Ok((_, received_count)) => {
                                                 assert_eq!(received_count, count);
                                                 for fd in fds.into_iter().take(received_count) {

@@ -259,7 +259,7 @@ fn update_focus_state(
                     .cloned()
                     .unwrap_or(seat.active_output());
 
-                let focus = State::surface_under(new_pos, &output, &*shell)
+                let focus = State::surface_under(new_pos, &output, &shell)
                     .map(|(focus, loc)| (focus, loc.as_logical()));
                 //drop here to avoid multiple borrows
                 mem::drop(shell);
@@ -371,7 +371,7 @@ impl Common {
 
             if let Some(target) = last_known_focus {
                 if target.alive() {
-                    if focus_target_is_valid(&mut *shell, seat, &output, target) {
+                    if focus_target_is_valid(&mut shell, seat, &output, target) {
                         continue; // Focus is valid
                     } else {
                         trace!("Wrong Window, focus fixup");
@@ -430,7 +430,7 @@ impl Common {
                 }
 
                 // update keyboard focus
-                let target = update_focus_target(&*shell, seat, &output);
+                let target = update_focus_target(&shell, seat, &output);
                 std::mem::drop(shell);
                 //I can probably feature gate this condition
                 debug!("Restoring focus to {:?}", target.as_ref());

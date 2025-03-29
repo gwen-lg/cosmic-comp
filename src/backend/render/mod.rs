@@ -762,7 +762,7 @@ where
     };
 
     render_input_order::<()>(
-        &*shell,
+        &shell,
         output,
         previous,
         current,
