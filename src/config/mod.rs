@@ -192,7 +192,7 @@ pub struct ScreenFilter {
 
 impl ScreenFilter {
     pub fn is_noop(&self) -> bool {
-        self.inverted == false && self.color_filter.is_none()
+        !self.inverted && self.color_filter.is_none()
     }
 }
 

@@ -1390,7 +1390,7 @@ impl SurfaceThreadState {
                                     .texture
                                     .as_ref()
                                     .is_some_and(|tex| tex.format() == Some(format))
-                                    && (session.draw_cursor() == false
+                                    && (!session.draw_cursor()
                                         || pre_postprocess_data.cursor_texture.is_none())
                                 {
                                     None

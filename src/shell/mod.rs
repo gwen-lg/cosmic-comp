@@ -614,7 +614,7 @@ impl WorkspaceSet {
             .filter(|kept| !**kept)
             .count();
 
-        if kept.iter().any(|val| *val == false) {
+        if kept.iter().any(|val| !(*val)) {
             self.update_workspace_idxs(state);
         }
     }
@@ -1000,7 +1000,7 @@ impl Workspaces {
                     s.active = active;
                 });
 
-                if keep.iter().any(|val| *val == false) {
+                if keep.iter().any(|val| !(*val)) {
                     for set in self.sets.values_mut() {
                         set.update_workspace_idxs(workspace_state);
                     }
