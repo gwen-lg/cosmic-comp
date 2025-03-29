@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  format:
+  code_checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -32,6 +32,17 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
+      - name: Check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --profile=test --all
+      - name: Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-targets -- -D warnings $(cat .lints | cut -f1 -d"#" | tr '\n' ' ')
+
   test:
     runs-on: ubuntu-latest
     steps:
