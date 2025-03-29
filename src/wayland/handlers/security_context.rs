@@ -44,7 +44,7 @@ impl SecurityContextHandler for State {
                             .and_then(|data| data.downcast_ref::<XWaylandClientData>())
                             .and_then(|data| data.user_data().get::<DrmNode>().cloned())
                     })
-                    .or_else(|| new_state.advertised_drm_node);
+                    .or(new_state.advertised_drm_node);
 
                 if let Err(err) = state.common.display_handle.insert_client(
                     client_stream,

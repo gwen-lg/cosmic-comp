@@ -159,7 +159,7 @@ impl OverviewMode {
     }
 
     pub fn trigger(&self) -> Option<&Trigger> {
-        self.active_trigger().or_else(|| {
+        self.active_trigger().or({
             if let OverviewMode::Ended(trigger, _) = self {
                 trigger.as_ref()
             } else {

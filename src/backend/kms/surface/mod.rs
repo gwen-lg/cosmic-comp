@@ -1016,7 +1016,7 @@ impl SurfaceThreadState {
         let source_output = self
             .mirroring
             .as_ref()
-            .or((!self.screen_filter.is_noop()).then(|| &self.output))
+            .or((!self.screen_filter.is_noop()).then_some(&self.output))
             .filter(|output| {
                 PostprocessOutputConfig::for_output_untransformed(output)
                     != PostprocessOutputConfig::for_output(&self.output)

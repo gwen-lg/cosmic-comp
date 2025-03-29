@@ -132,7 +132,7 @@ impl<'a> TryFrom<&'a mut PendingOutputConfigurationInner> for OutputConfiguratio
                 wlr_mode
                     .data::<Mode>()
                     .cloned()
-                    .ok_or_else(|| zwlr_output_configuration_head_v1::Error::InvalidMode)?,
+                    .ok_or(zwlr_output_configuration_head_v1::Error::InvalidMode)?,
             )),
             Some(ModeConfiguration::Custom { size, refresh }) => {
                 Some(ModeConfiguration::Custom { size, refresh })
