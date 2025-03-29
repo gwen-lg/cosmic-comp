@@ -4605,7 +4605,7 @@ where
                         };
                     }
 
-                    if matches!(swap_desc, Some(ref desc) if &desc.node == &node_id) {
+                    if matches!(swap_desc, Some(ref desc) if desc.node == node_id) {
                         if let Some(renderer) = renderer.as_mut() {
                             elements.push(
                                 BackdropShader::element(
@@ -4830,7 +4830,7 @@ where
                         geo.size -= (WINDOW_BACKDROP_GAP * 2, WINDOW_BACKDROP_GAP * 2).into();
                     }
 
-                    if matches!(swap_desc, Some(ref desc) if &desc.node == &node_id && desc.stack_window.is_none())
+                    if matches!(swap_desc, Some(ref desc) if desc.node == node_id && desc.stack_window.is_none())
                     {
                         let swap_geo = swap_geometry(
                             geo.size.as_logical(),
@@ -5533,7 +5533,7 @@ where
                 if swap_desc
                     .as_ref()
                     .map(|swap_desc| {
-                        (&swap_desc.node == &node_id
+                        (swap_desc.node == node_id
                             || target_tree
                                 .ancestor_ids(&node_id)
                                 .unwrap()

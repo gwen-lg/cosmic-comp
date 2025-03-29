@@ -279,7 +279,7 @@ where
             for instance in &mut self.instances {
                 let mut removed_heads = Vec::new();
                 for head in &mut instance.heads {
-                    if &head.output == &output {
+                    if head.output == output {
                         if head.obj.version() < zwlr_output_head_v1::REQ_RELEASE_SINCE {
                             removed_heads.push(head.obj.clone());
                         }

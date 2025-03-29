@@ -3963,7 +3963,7 @@ impl Shell {
         }
 
         let mut container = cosmic::config::COSMIC_TK.write().unwrap();
-        if &*container != &toolkit {
+        if *container != toolkit {
             *container = toolkit;
             drop(container);
             self.refresh(xdg_activation_state, workspace_state);
