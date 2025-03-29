@@ -424,7 +424,7 @@ where
     }
 }
 
-fn send_toplevel_to_client<D, W: 'static>(
+fn send_toplevel_to_client<D, W>(
     dh: &DisplayHandle,
     workspace_state: &WorkspaceState<D>,
     info: &ZcosmicToplevelInfoV1,
@@ -436,7 +436,7 @@ where
         + Dispatch<ZcosmicToplevelHandleV1, ToplevelHandleState<W>>
         + ToplevelInfoHandler<Window = W>
         + 'static,
-    W: Window,
+    W: Window + 'static,
 {
     let mut state = window
         .user_data()
