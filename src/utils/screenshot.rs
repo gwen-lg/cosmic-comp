@@ -77,10 +77,10 @@ pub fn screenshot_window(state: &mut State, surface: &CosmicSurface) {
                     ))
                     .unwrap(),
             ));
-            let file = std::fs::File::create(path.join(name))?;
 
-            let ref mut writer = std::io::BufWriter::new(file);
-            let mut encoder = png::Encoder::new(writer, bbox.size.w as u32, bbox.size.h as u32);
+            let filename = path.join(name);
+            let file = std::io::BufWriter::new(std::fs::File::create(filename)?);
+            let mut encoder = png::Encoder::new(file, bbox.size.w as u32, bbox.size.h as u32);
             encoder.set_color(png::ColorType::Rgba);
             encoder.set_depth(png::BitDepth::Eight);
             encoder.set_source_gamma(png::ScaledFloat::new(1.0 / 2.2)); // 1.0 / 2.2, unscaled, but rounded
