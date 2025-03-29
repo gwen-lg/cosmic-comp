@@ -100,16 +100,16 @@ impl ResizeSurfaceGrab {
             // If the resizing vertical edge is close to our output's edge in the same direction, snap to it.
             let output_geom = self.output.geometry().to_local(&self.output);
             if self.edges.intersects(ResizeEdge::LEFT) {
-                if ((self.initial_window_location.x - dx as i32 - output_geom.loc.x).abs() as u32)
+                if (self.initial_window_location.x - dx as i32 - output_geom.loc.x).unsigned_abs()
                     < self.edge_snap_threshold
                 {
                     new_window_width = self.initial_window_size.w - output_geom.loc.x
                         + self.initial_window_location.x;
                 }
-            } else if ((self.initial_window_location.x + self.initial_window_size.w + dx as i32
+            } else if (self.initial_window_location.x + self.initial_window_size.w + dx as i32
                 - output_geom.loc.x
                 - output_geom.size.w)
-                .abs() as u32)
+                .unsigned_abs()
                 < self.edge_snap_threshold
             {
                 new_window_width =
@@ -128,16 +128,16 @@ impl ResizeSurfaceGrab {
             // If the resizing horizontal edge is close to our output's edge in the same direction, snap to it.
             let output_geom = self.output.geometry().to_local(&self.output);
             if self.edges.intersects(ResizeEdge::TOP) {
-                if ((self.initial_window_location.y - dy as i32 - output_geom.loc.y).abs() as u32)
+                if (self.initial_window_location.y - dy as i32 - output_geom.loc.y).unsigned_abs()
                     < self.edge_snap_threshold
                 {
                     new_window_height = self.initial_window_size.h - output_geom.loc.y
                         + self.initial_window_location.y;
                 }
-            } else if ((self.initial_window_location.y + self.initial_window_size.h + dy as i32
+            } else if (self.initial_window_location.y + self.initial_window_size.h + dy as i32
                 - output_geom.loc.y
                 - output_geom.size.h)
-                .abs() as u32)
+                .unsigned_abs()
                 < self.edge_snap_threshold
             {
                 new_window_height =
