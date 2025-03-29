@@ -2657,7 +2657,6 @@ impl Shell {
         new_pos.map(|pos| (focus_target, pos))
     }
 
-    #[must_use]
     pub fn move_current_window(
         &mut self,
         seat: &Seat<State>,
