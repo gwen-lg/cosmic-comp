@@ -33,6 +33,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: "-D warnings"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -71,10 +73,16 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --profile=test --all -- -D warnings
+          args: --profile=test --all
+
+      - name: "Cargo doc"
+        if: $${{ always() }}
+        id: cargo_doc
+        run: cargo doc
+
       - name: Clippy
         if: $${{ always() }}
-        run: cargo clippy --all-targets -- -D warnings
+        run: cargo clippy --all-targets
       - name: Test features
         uses: actions-rs/cargo@v1
         env:
