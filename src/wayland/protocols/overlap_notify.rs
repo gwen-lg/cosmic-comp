@@ -117,7 +117,7 @@ impl OverlapNotifyState {
                                         .lock()
                                         .unwrap();
                                     active_workspaces.iter().any(|active_workspace| {
-                                        state.in_workspace(&active_workspace)
+                                        state.in_workspace(active_workspace)
                                     })
                                 })
                         {

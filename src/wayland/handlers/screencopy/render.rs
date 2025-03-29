@@ -303,7 +303,7 @@ pub fn render_workspace_to_buffer(
                 &common.shell,
                 None,
                 common.clock.now(),
-                &output,
+                output,
                 None,
                 handle,
                 cursor_mode,
@@ -323,7 +323,7 @@ pub fn render_workspace_to_buffer(
                 &common.shell,
                 None,
                 common.clock.now(),
-                &output,
+                output,
                 None,
                 handle,
                 cursor_mode,
@@ -710,7 +710,7 @@ pub fn render_cursor_to_buffer(
     {
         let mut elements = cursor::draw_cursor(
             renderer,
-            &seat,
+            seat,
             Point::from((0.0, 0.0)),
             1.0.into(),
             1.0,

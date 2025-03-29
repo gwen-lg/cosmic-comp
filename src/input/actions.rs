@@ -109,7 +109,7 @@ impl State {
             SwipeAction::NextWorkspace => {
                 let _ = to_next_workspace(
                     &mut *self.common.shell.write().unwrap(),
-                    &seat,
+                    seat,
                     true,
                     &mut self.common.workspace_state.update(),
                 );
@@ -117,7 +117,7 @@ impl State {
             SwipeAction::PrevWorkspace => {
                 let _ = to_previous_workspace(
                     &mut *self.common.shell.write().unwrap(),
-                    &seat,
+                    seat,
                     true,
                     &mut self.common.workspace_state.update(),
                 );
@@ -551,7 +551,7 @@ impl State {
                             .unwrap()
                             .1
                             .focus_stack
-                            .get(&seat)
+                            .get(seat)
                             .last()
                             .cloned()
                             .map(KeyboardFocusTarget::from);
@@ -884,7 +884,7 @@ impl State {
                 let output = seat.active_output();
                 let mut shell = self.common.shell.write().unwrap();
                 let workspace = shell.active_space_mut(&output).unwrap();
-                workspace.tiling_layer.update_orientation(None, &seat);
+                workspace.tiling_layer.update_orientation(None, seat);
             }
 
             Action::Orientation(orientation) => {
@@ -893,7 +893,7 @@ impl State {
                 let workspace = shell.active_space_mut(&output).unwrap();
                 workspace
                     .tiling_layer
-                    .update_orientation(Some(orientation), &seat);
+                    .update_orientation(Some(orientation), seat);
             }
 
             Action::ToggleStacking => {
@@ -1046,7 +1046,7 @@ impl State {
         if zoom_seat == *seat {
             let new_level = (current_level + change).max(1.0);
             shell.trigger_zoom(
-                &seat,
+                seat,
                 new_level,
                 &self.common.config.cosmic_conf.accessibility_zoom,
                 animate,

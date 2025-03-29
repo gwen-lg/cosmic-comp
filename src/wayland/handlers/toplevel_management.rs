@@ -55,7 +55,7 @@ impl ToplevelManagementHandler for State {
 
                 let handle = workspace.handle;
                 let res = shell.activate(
-                    &output,
+                    output,
                     idx,
                     WorkspaceDelta::new_shortcut(),
                     &mut self.common.workspace_state.update(),
@@ -80,7 +80,7 @@ impl ToplevelManagementHandler for State {
                 if seat.active_output() != *output {
                     match res {
                         Ok(Some(new_pos)) => {
-                            seat.set_active_output(&output);
+                            seat.set_active_output(output);
                             if let Some(ptr) = seat.get_pointer() {
                                 let serial = SERIAL_COUNTER.next_serial();
                                 ptr.motion(
@@ -96,7 +96,7 @@ impl ToplevelManagementHandler for State {
                             }
                         }
                         Ok(None) => {
-                            seat.set_active_output(&output);
+                            seat.set_active_output(output);
                         }
                         _ => {}
                     }
@@ -125,7 +125,7 @@ impl ToplevelManagementHandler for State {
             if let Some(from_workspace) = shell.space_for_mut(&mapped) {
                 // If window is part of a stack, remove it and map it outside the stack
                 if let Some(stack) = mapped.stack_ref() {
-                    stack.remove_window(&window);
+                    stack.remove_window(window);
                     mapped = CosmicWindow::new(
                         window.clone(),
                         self.common.event_loop_handle.clone(),

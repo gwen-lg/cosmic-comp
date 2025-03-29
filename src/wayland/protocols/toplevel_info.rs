@@ -556,7 +556,7 @@ where
                 .geometry
                 .filter(|_| instance.version() >= zcosmic_toplevel_handle_v1::EVT_GEOMETRY_SINCE)
                 .filter(|geo| output.geometry().intersection(*geo).is_some())
-                .map(|geo| geo.to_local(&output));
+                .map(|geo| geo.to_local(output));
             for wl_output in output.client_outputs(&client) {
                 if handle_state.wl_outputs.insert(wl_output.clone()) {
                     instance.output_enter(&wl_output);
@@ -578,7 +578,7 @@ where
                     .iter()
                     .any(|output| output.owns(wl_output));
             if !retain {
-                instance.output_leave(&wl_output);
+                instance.output_leave(wl_output);
                 changed = true;
             }
             retain
@@ -590,12 +590,12 @@ where
         .iter()
         .filter(|w| !handle_state.workspaces.contains(w))
     {
-        for handle in workspace_state.raw_workspace_handles(&new_workspace, &instance.id()) {
-            instance.workspace_enter(&handle);
+        for handle in workspace_state.raw_workspace_handles(new_workspace, &instance.id()) {
+            instance.workspace_enter(handle);
             changed = true;
         }
-        for handle in workspace_state.raw_ext_workspace_handles(&new_workspace, &instance.id()) {
-            instance.ext_workspace_enter(&handle);
+        for handle in workspace_state.raw_ext_workspace_handles(new_workspace, &instance.id()) {
+            instance.ext_workspace_enter(handle);
             changed = true;
         }
     }
@@ -604,12 +604,12 @@ where
         .iter()
         .filter(|w| !state.workspaces.contains(w))
     {
-        for handle in workspace_state.raw_workspace_handles(&old_workspace, &instance.id()) {
-            instance.workspace_leave(&handle);
+        for handle in workspace_state.raw_workspace_handles(old_workspace, &instance.id()) {
+            instance.workspace_leave(handle);
             changed = true;
         }
-        for handle in workspace_state.raw_ext_workspace_handles(&old_workspace, &instance.id()) {
-            instance.ext_workspace_leave(&handle);
+        for handle in workspace_state.raw_ext_workspace_handles(old_workspace, &instance.id()) {
+            instance.ext_workspace_leave(handle);
             changed = true;
         }
     }

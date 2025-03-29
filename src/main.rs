@@ -139,7 +139,7 @@ fn main() -> Result<()> {
         {
             let dh = state.common.display_handle.clone();
             for client in clients.values() {
-                client_compositor_state(&client).blocker_cleared(state, &dh);
+                client_compositor_state(client).blocker_cleared(state, &dh);
             }
         }
 

@@ -139,7 +139,7 @@ impl MoveGrabState {
         };
 
         let non_exclusive_geometry = {
-            let layers = layer_map_for_output(&output);
+            let layers = layer_map_for_output(output);
             layers.non_exclusive_zone()
         };
 
@@ -424,7 +424,7 @@ impl MoveGrab {
                             indicator.output_enter(output, overlap);
                         }
                     }
-                } else if self.window_outputs.remove(&output) {
+                } else if self.window_outputs.remove(output) {
                     self.window.output_leave(output);
                     if let Some(indicator) = grab_state.stacking_indicator.as_ref().map(|x| &x.0) {
                         indicator.output_leave(output);

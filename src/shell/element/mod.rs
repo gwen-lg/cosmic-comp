@@ -560,7 +560,7 @@ impl CosmicMapped {
 
                 let stack = CosmicStack::new(std::iter::once(surface), handle, theme);
                 if let Some(geo) = self.last_geometry.lock().unwrap().clone() {
-                    stack.set_geometry(geo.to_global(&output));
+                    stack.set_geometry(geo.to_global(output));
                 }
                 stack.output_enter(output, overlap);
                 stack.set_activate(activated);
@@ -585,7 +585,7 @@ impl CosmicMapped {
         let window = CosmicWindow::new(surface, handle, theme);
 
         if let Some(geo) = self.last_geometry.lock().unwrap().clone() {
-            window.set_geometry(geo.to_global(&output));
+            window.set_geometry(geo.to_global(output));
         }
         window.output_enter(output, overlap);
         window.set_activate(self.is_activated(true));

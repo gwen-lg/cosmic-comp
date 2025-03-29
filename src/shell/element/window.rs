@@ -868,7 +868,7 @@ impl TouchTarget<State> for CosmicWindow {
     }
 
     fn up(&self, seat: &Seat<State>, data: &mut State, event: &UpEvent, seq: Serial) {
-        TouchTarget::up(&self.0, seat, data, &event, seq)
+        TouchTarget::up(&self.0, seat, data, event, seq)
     }
 
     fn motion(&self, seat: &Seat<State>, data: &mut State, event: &TouchMotionEvent, seq: Serial) {

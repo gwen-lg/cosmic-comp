@@ -1823,7 +1823,7 @@ impl State {
         if let Some(focus) = current_focus {
             if let Some(new_descriptor) = shell
                 .workspaces
-                .active(&focused_output)
+                .active(focused_output)
                 .unwrap()
                 .1
                 .node_desc(focus)
@@ -1838,7 +1838,7 @@ impl State {
                             .find(|w| w.handle == new_descriptor.handle)
                         {
                             {
-                                let mut stack = new_workspace.focus_stack.get_mut(&seat);
+                                let mut stack = new_workspace.focus_stack.get_mut(seat);
                                 for elem in old_descriptor.focus_stack.iter().flat_map(|node_id| {
                                     old_workspace.tiling_layer.element_for_node(node_id)
                                 }) {
@@ -1846,7 +1846,7 @@ impl State {
                                 }
                             }
                             {
-                                let mut stack = old_workspace.focus_stack.get_mut(&seat);
+                                let mut stack = old_workspace.focus_stack.get_mut(seat);
                                 for elem in new_descriptor.focus_stack.iter().flat_map(|node_id| {
                                     new_workspace.tiling_layer.element_for_node(node_id)
                                 }) {
@@ -1856,7 +1856,7 @@ impl State {
                             if let Some(focus) = TilingLayout::swap_trees(
                                 &mut old_workspace.tiling_layer,
                                 Some(&mut new_workspace.tiling_layer),
-                                &old_descriptor,
+                                old_descriptor,
                                 &new_descriptor,
                             ) {
                                 let seat = seat.clone();
@@ -1873,7 +1873,7 @@ impl State {
                         if let Some(focus) = TilingLayout::swap_trees(
                             &mut workspace.tiling_layer,
                             None,
-                            &old_descriptor,
+                            old_descriptor,
                             &new_descriptor,
                         ) {
                             std::mem::drop(spaces);
@@ -1887,7 +1887,7 @@ impl State {
                 }
             }
         } else {
-            let new_workspace = shell.workspaces.active(&focused_output).unwrap().1.handle;
+            let new_workspace = shell.workspaces.active(focused_output).unwrap().1.handle;
             if new_workspace != old_descriptor.handle {
                 let spaces = shell.workspaces.spaces_mut();
                 let (mut old_w, mut other_w) =
@@ -1898,7 +1898,7 @@ impl State {
                     {
                         if new_workspace.tiling_layer.windows().next().is_none() {
                             {
-                                let mut stack = new_workspace.focus_stack.get_mut(&seat);
+                                let mut stack = new_workspace.focus_stack.get_mut(seat);
                                 for elem in old_descriptor.focus_stack.iter().flat_map(|node_id| {
                                     old_workspace.tiling_layer.element_for_node(node_id)
                                 }) {
@@ -1909,8 +1909,8 @@ impl State {
                                 &mut old_workspace.tiling_layer,
                                 &mut new_workspace.tiling_layer,
                                 &new_workspace.handle,
-                                &seat,
-                                new_workspace.focus_stack.get(&seat).iter(),
+                                seat,
+                                new_workspace.focus_stack.get(seat).iter(),
                                 old_descriptor.clone(),
                                 None,
                             ) {
@@ -2212,7 +2212,7 @@ fn cursor_sessions_for_output<'a>(
     output: &'a Output,
 ) -> impl Iterator<Item = CursorSession> + 'a {
     shell
-        .active_space(&output)
+        .active_space(output)
         .into_iter()
         .flat_map(|workspace| {
             let maybe_fullscreen = workspace.get_fullscreen();

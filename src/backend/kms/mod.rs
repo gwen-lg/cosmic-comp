@@ -168,7 +168,7 @@ pub fn init_backend(
             if let Some(device) = kms.drm_devices.get(&primary_node) {
                 let import_device = device.drm.device().device_fd().clone();
                 if supports_syncobj_eventfd(&import_device) {
-                    let syncobj_state = DrmSyncobjState::new::<State>(&dh, import_device);
+                    let syncobj_state = DrmSyncobjState::new::<State>(dh, import_device);
                     kms.syncobj_state = Some(syncobj_state);
                 }
             }
@@ -212,7 +212,7 @@ fn init_libinput(
     .context("Failed to initialize libinput event source")?;
 
     // Create relative pointer global
-    RelativePointerManagerState::new::<State>(&dh);
+    RelativePointerManagerState::new::<State>(dh);
 
     Ok(libinput_context)
 }
@@ -761,7 +761,7 @@ impl KmsState {
                                     &mut renderer,
                                     &shell,
                                     now,
-                                    &output,
+                                    output,
                                     CursorMode::All,
                                     None,
                                 )
@@ -843,7 +843,7 @@ impl KmsState {
                                 &mut renderer,
                                 &shell,
                                 now,
-                                &output,
+                                output,
                                 CursorMode::All,
                                 None,
                             )
@@ -885,7 +885,7 @@ impl KmsState {
                         &mut renderer,
                         &shell,
                         now,
-                        &output,
+                        output,
                         CursorMode::All,
                         None,
                     )

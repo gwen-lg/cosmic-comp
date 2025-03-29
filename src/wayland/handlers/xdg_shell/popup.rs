@@ -22,7 +22,7 @@ use tracing::warn;
 
 impl Shell {
     pub fn unconstrain_popup(&self, surface: &PopupSurface) {
-        if let Some(parent) = get_popup_toplevel(&surface) {
+        if let Some(parent) = get_popup_toplevel(surface) {
             if let Some(elem) = self.element_for_surface(&parent) {
                 let (mut element_geo, output, is_tiled) =
                     if let Some(workspace) = self.space_for(elem) {
@@ -87,7 +87,7 @@ pub fn update_reactive_popups<'a>(
     for (popup, _) in PopupManager::popups_for_surface(toplevel.wl_surface()) {
         match popup {
             PopupKind::Xdg(surface) => {
-                let positioner = with_states(&surface.wl_surface(), |states| {
+                let positioner = with_states(surface.wl_surface(), |states| {
                     let attributes = states
                         .data_map
                         .get::<XdgPopupSurfaceData>()

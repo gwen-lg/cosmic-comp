@@ -945,7 +945,7 @@ where
                         .and_then(|(last_primitives, last_color)| {
                             (last_color == &background_color).then(|| {
                                 damage::diff(
-                                    &last_primitives,
+                                    last_primitives,
                                     current_layers,
                                     |_| {
                                         vec![cosmic::iced::Rectangle::new(
@@ -1011,7 +1011,7 @@ where
             match MemoryRenderBufferRenderElement::from_buffer(
                 renderer,
                 location.to_f64(),
-                &buffer,
+                buffer,
                 Some(alpha),
                 Some(Rectangle::from_size(
                     size.to_f64()

@@ -93,7 +93,7 @@ pub fn screenshot_window(state: &mut State, surface: &CosmicSurface) {
             );
             encoder.set_source_chromaticities(source_chromaticities);
             let mut writer = encoder.write_header()?;
-            writer.write_image_data(&gl_data)?;
+            writer.write_image_data(gl_data)?;
         }
 
         Ok(())

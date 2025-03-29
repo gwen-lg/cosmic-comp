@@ -407,8 +407,8 @@ impl Workspace {
             let _ = self.unmaximize_request(mapped);
         }
 
-        let mut was_floating = self.floating_layer.unmap(&mapped).is_some();
-        let mut was_tiling = self.tiling_layer.unmap(&mapped);
+        let mut was_floating = self.floating_layer.unmap(mapped).is_some();
+        let mut was_tiling = self.tiling_layer.unmap(mapped);
         if was_floating || was_tiling {
             assert!(was_floating != was_tiling);
         }
@@ -650,14 +650,14 @@ impl Workspace {
                 match state.original_layer {
                     ManagedLayer::Tiling if self.tiling_enabled => {
                         // should still be mapped in tiling
-                        self.floating_layer.unmap(&elem);
+                        self.floating_layer.unmap(elem);
                         elem.output_enter(&self.output, elem.bbox());
                         elem.set_maximized(false);
                         elem.set_geometry(state.original_geometry.to_global(&self.output));
                         elem.configure();
                         self.tiling_layer.recalculate();
                         self.tiling_layer
-                            .element_geometry(&elem)
+                            .element_geometry(elem)
                             .map(|geo| geo.size.as_logical())
                     }
                     ManagedLayer::Sticky => unreachable!(),
@@ -709,7 +709,7 @@ impl Workspace {
         };
 
         if self.tiling_layer.mapped().any(|(m, _)| m == elem) {
-            let was_maximized = self.floating_layer.unmap(&elem).is_some();
+            let was_maximized = self.floating_layer.unmap(elem).is_some();
             let tiling_state = self.tiling_layer.unmap_minimize(elem, to);
             Some(MinimizedWindow {
                 window: elem.clone(),
@@ -1001,7 +1001,7 @@ impl Workspace {
                     let state = window.maximized_state.lock().unwrap();
                     state.as_ref().unwrap().original_geometry.clone()
                 };
-                self.unmaximize_request(&window);
+                self.unmaximize_request(window);
                 maximized_windows.push((window.clone(), ManagedLayer::Tiling, original_geometry));
             }
 
@@ -1062,7 +1062,7 @@ impl Workspace {
                 self.floating_layer.map(window.clone(), None);
             } else if self.floating_layer.mapped().any(|w| w == window) {
                 let focus_stack = self.focus_stack.get(seat);
-                self.floating_layer.unmap(&window);
+                self.floating_layer.unmap(window);
                 self.tiling_layer
                     .map(window.clone(), Some(focus_stack.iter()), None)
             }

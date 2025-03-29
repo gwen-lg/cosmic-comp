@@ -51,7 +51,7 @@ impl ScreencopyHandler for State {
                 .and_then(|output| constraints_for_output(&output, &mut self.backend)),
             ImageSourceData::Workspace(handle) => {
                 let shell = self.common.shell.read().unwrap();
-                let output = shell.workspaces.space_for_handle(&handle)?.output();
+                let output = shell.workspaces.space_for_handle(handle)?.output();
                 constraints_for_output(output, &mut self.backend)
             }
             ImageSourceData::Toplevel(window) => {
@@ -352,7 +352,7 @@ fn constraints_for_output(output: &Output, backend: &mut BackendData) -> Option<
     };
 
     let mut renderer = backend
-        .offscreen_renderer(|kms| kms.target_node_for_output(&output).or(kms.primary_node))
+        .offscreen_renderer(|kms| kms.target_node_for_output(output).or(kms.primary_node))
         .unwrap();
     Some(constraints_for_renderer(mode, renderer.as_mut()))
 }

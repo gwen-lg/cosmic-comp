@@ -142,7 +142,7 @@ impl Shell {
         }
 
         // update FocusStack and notify layouts about new focus (if any window)
-        let workspace = self.space_for_mut(&mapped);
+        let workspace = self.space_for_mut(mapped);
         let workspace = if workspace.is_none() {
             //should this be the active output or the focused output?
             self.active_space_mut(&seat.focused_or_active_output())
@@ -154,7 +154,7 @@ impl Shell {
         let mut focus_stack = workspace.focus_stack.get_mut(seat);
         if Some(mapped) != focus_stack.last() {
             trace!(?mapped, "Focusing window.");
-            focus_stack.append(&mapped);
+            focus_stack.append(mapped);
             // also remove popup grabs, if we are switching focus
             if let Some(mut popup_grab) = seat
                 .user_data()
@@ -195,7 +195,7 @@ impl Shell {
                 raise_with_children(&mut set.sticky_layer, focused);
             }
             for window in set.sticky_layer.mapped() {
-                window.set_activated(focused_windows.contains(&window));
+                window.set_activated(focused_windows.contains(window));
                 window.configure();
             }
             for m in set.minimized_windows.iter() {
@@ -208,7 +208,7 @@ impl Shell {
                 raise_with_children(&mut workspace.floating_layer, focused);
             }
             for window in workspace.mapped() {
-                window.set_activated(focused_windows.contains(&window));
+                window.set_activated(focused_windows.contains(window));
                 window.configure();
             }
             for m in workspace.minimized_windows.iter() {
@@ -362,15 +362,15 @@ impl Common {
                 }
             }
 
-            update_pointer_focus(state, &seat);
+            update_pointer_focus(state, seat);
 
             let output = seat.focused_or_active_output();
             let mut shell = state.common.shell.write().unwrap();
-            let last_known_focus = ActiveFocus::get(&seat);
+            let last_known_focus = ActiveFocus::get(seat);
 
             if let Some(target) = last_known_focus {
                 if target.alive() {
-                    if focus_target_is_valid(&mut *shell, &seat, &output, target) {
+                    if focus_target_is_valid(&mut *shell, seat, &output, target) {
                         continue; // Focus is valid
                     } else {
                         trace!("Wrong Window, focus fixup");
@@ -406,7 +406,7 @@ impl Common {
                 }
             } else {
                 let workspace = shell.active_space(&output).unwrap();
-                let focus_stack = workspace.focus_stack.get(&seat);
+                let focus_stack = workspace.focus_stack.get(seat);
 
                 if focus_stack.last().is_none() {
                     continue; // Focus is valid
@@ -429,7 +429,7 @@ impl Common {
                 }
 
                 // update keyboard focus
-                let target = update_focus_target(&*shell, &seat, &output);
+                let target = update_focus_target(&*shell, seat, &output);
                 std::mem::drop(shell);
                 //I can probably feature gate this condition
                 debug!("Restoring focus to {:?}", target.as_ref());
@@ -449,8 +449,8 @@ impl Common {
                     .as_ref()
                     .and_then(|t| t.wl_surface())
                     .and_then(|s| state.common.display_handle.get_client(s.id()).ok());
-                set_data_device_focus(&state.common.display_handle, &seat, client.clone());
-                set_primary_focus(&state.common.display_handle, &seat, client);
+                set_data_device_focus(&state.common.display_handle, seat, client.clone());
+                set_primary_focus(&state.common.display_handle, seat, client);
             }
         }
 
@@ -505,8 +505,8 @@ fn focus_target_is_valid(
                 .mapped()
                 .any(|m| m == &mapped);
 
-            let workspace = shell.active_space(&output).unwrap();
-            let focus_stack = workspace.focus_stack.get(&seat);
+            let workspace = shell.active_space(output).unwrap();
+            let focus_stack = workspace.focus_stack.get(seat);
             let is_in_focus_stack = focus_stack.last().map(|m| m == &mapped).unwrap_or(false);
             let has_fullscreen = workspace.get_fullscreen().is_some();
 
@@ -517,18 +517,18 @@ fn focus_target_is_valid(
             (is_sticky || is_in_focus_stack) && !has_fullscreen
         }
         KeyboardFocusTarget::LayerSurface(layer) => {
-            layer_map_for_output(&output).layers().any(|l| l == &layer)
+            layer_map_for_output(output).layers().any(|l| l == &layer)
         }
         KeyboardFocusTarget::Group(WindowGroup { node, .. }) => shell
             .workspaces
-            .active(&output)
+            .active(output)
             .unwrap()
             .1
             .tiling_layer
             .has_node(&node),
         KeyboardFocusTarget::Fullscreen(window) => {
-            let workspace = shell.active_space(&output).unwrap();
-            let focus_stack = workspace.focus_stack.get(&seat);
+            let workspace = shell.active_space(output).unwrap();
+            let focus_stack = workspace.focus_stack.get(seat);
 
             focus_stack
                 .last()
@@ -562,16 +562,16 @@ fn update_focus_target(
             })
             .cloned()
             .map(KeyboardFocusTarget::from)
-    } else if let Some(surface) = shell.active_space(&output).unwrap().get_fullscreen() {
+    } else if let Some(surface) = shell.active_space(output).unwrap().get_fullscreen() {
         Some(KeyboardFocusTarget::Fullscreen(surface.clone()))
     } else {
         shell
-            .active_space(&output)
+            .active_space(output)
             .unwrap()
             .focus_stack
-            .get(&seat)
+            .get(seat)
             .last()
-            .or_else(|| shell.active_space(&output).unwrap().mapped().next())
+            .or_else(|| shell.active_space(output).unwrap().mapped().next())
             .cloned()
             .map(KeyboardFocusTarget::from)
     }

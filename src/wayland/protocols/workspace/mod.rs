@@ -422,15 +422,15 @@ where
     fn done(&mut self) {
         let mut changed = false;
         for instance in &self.instances {
-            for mut group in &mut self.groups {
-                if cosmic::send_group_to_client::<D>(&self.dh, instance, &mut group) {
+            for group in &mut self.groups {
+                if cosmic::send_group_to_client::<D>(&self.dh, instance, group) {
                     changed = true;
                 }
             }
         }
         for instance in &self.ext_instances {
-            for mut group in &mut self.groups {
-                if ext::send_group_to_client::<D>(&self.dh, instance, &mut group) {
+            for group in &mut self.groups {
+                if ext::send_group_to_client::<D>(&self.dh, instance, group) {
                     changed = true;
                 }
             }

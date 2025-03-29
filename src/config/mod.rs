@@ -719,13 +719,13 @@ pub struct PersistenceGuard<'a, T: Serialize>(Option<PathBuf>, &'a mut T);
 impl<'a, T: Serialize> std::ops::Deref for PersistenceGuard<'a, T> {
     type Target = T;
     fn deref(&self) -> &T {
-        &self.1
+        self.1
     }
 }
 
 impl<'a, T: Serialize> std::ops::DerefMut for PersistenceGuard<'a, T> {
     fn deref_mut(&mut self) -> &mut T {
-        &mut self.1
+        self.1
     }
 }
 

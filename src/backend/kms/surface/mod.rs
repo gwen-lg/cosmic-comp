@@ -1757,7 +1757,7 @@ fn render_node_for_output(
         .flat_map(|w| w.wl_surface().and_then(|s| source_node_for_surface(&s)))
         .collect::<Vec<_>>();
 
-    if nodes.contains(&target_node) || nodes.is_empty() {
+    if nodes.contains(target_node) || nodes.is_empty() {
         *target_node
     } else {
         *primary_node

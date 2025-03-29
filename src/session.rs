@@ -133,7 +133,7 @@ pub fn setup_socket(handle: LoopHandle<State>, common: &Common) -> Result<()> {
                         stream.read_bytes = 0;
                         match std::str::from_utf8(&stream.buffer) {
                             Ok(message) => {
-                                match serde_json::from_str::<'_, Message>(&message) {
+                                match serde_json::from_str::<'_, Message>(message) {
                                     Ok(Message::NewPrivilegedClient { count }) => {
                                         let mut buffer = [0; 1];
                                         let mut fds = vec![0; count];

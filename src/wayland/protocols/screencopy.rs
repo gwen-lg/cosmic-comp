@@ -920,7 +920,7 @@ where
                                 || buffer_size.h < constraints.size.h
                             {
                                 debug!(?buffer_size, ?constraints.size, "buffer too small for screencopy");
-                                inner.fail(&resource, FailureReason::BufferConstraints);
+                                inner.fail(resource, FailureReason::BufferConstraints);
                                 return;
                             }
 
@@ -937,7 +937,7 @@ where
                                     ?dma_constraints,
                                     "unsupported buffer format for screencopy"
                                 );
-                                inner.fail(&resource, FailureReason::BufferConstraints);
+                                inner.fail(resource, FailureReason::BufferConstraints);
                                 return;
                             }
                         }
@@ -947,7 +947,7 @@ where
                                 Ok(data) => data,
                                 Err(err) => {
                                     debug!(?err, "Error accessing shm buffer for screencopy");
-                                    inner.fail(&resource, FailureReason::Unknown);
+                                    inner.fail(resource, FailureReason::Unknown);
                                     return;
                                 }
                             };
@@ -956,24 +956,24 @@ where
                                 || buffer_data.height < constraints.size.h
                             {
                                 debug!(?buffer_data, ?constraints.size, "buffer too small for screencopy");
-                                inner.fail(&resource, FailureReason::BufferConstraints);
+                                inner.fail(resource, FailureReason::BufferConstraints);
                                 return;
                             }
 
                             if !constraints.shm.contains(&buffer_data.format) {
                                 debug!(?buffer_data.format, ?constraints.shm, "unsupported buffer format for screencopy");
-                                inner.fail(&resource, FailureReason::BufferConstraints);
+                                inner.fail(resource, FailureReason::BufferConstraints);
                                 return;
                             }
                         }
                         x => {
                             debug!(?x, "Attempt to screencopy with unsupported buffer type");
-                            inner.fail(&resource, FailureReason::BufferConstraints);
+                            inner.fail(resource, FailureReason::BufferConstraints);
                             return;
                         }
                     }
                 } else {
-                    inner.fail(&resource, FailureReason::Unknown);
+                    inner.fail(resource, FailureReason::Unknown);
                     return;
                 }
 
@@ -994,7 +994,7 @@ where
                     })
                 {
                     if session.inner.lock().unwrap().stopped {
-                        inner.fail(&resource, FailureReason::Stopped);
+                        inner.fail(resource, FailureReason::Stopped);
                         return;
                     }
 
@@ -1014,14 +1014,14 @@ where
                     })
                 {
                     if session.inner.lock().unwrap().stopped {
-                        inner.fail(&resource, FailureReason::Stopped);
+                        inner.fail(resource, FailureReason::Stopped);
                         return;
                     }
 
                     std::mem::drop(inner);
                     state.cursor_frame(session, frame);
                 } else {
-                    inner.fail(&resource, FailureReason::Unknown);
+                    inner.fail(resource, FailureReason::Unknown);
                 }
             }
             _ => {}

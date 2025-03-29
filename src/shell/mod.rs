@@ -349,7 +349,7 @@ fn create_workspace(
 ) -> Workspace {
     let workspace_handle = state
         .create_workspace(
-            &group_handle,
+            group_handle,
             if tiling {
                 TilingState::TilingEnabled
             } else {
@@ -522,7 +522,7 @@ impl WorkspaceSet {
         self.sticky_layer.set_output(new_output);
         for window in self.sticky_layer.windows() {
             toplevel_leave_output(&window, &self.output);
-            toplevel_enter_output(&window, &new_output);
+            toplevel_enter_output(&window, new_output);
         }
         for workspace in &mut self.workspaces {
             workspace.set_output(new_output);
@@ -715,9 +715,9 @@ impl Workspaces {
                 set
             })
             .unwrap_or_else(|| {
-                WorkspaceSet::new(workspace_state, &output, self.autotile, self.theme.clone())
+                WorkspaceSet::new(workspace_state, output, self.autotile, self.theme.clone())
             });
-        workspace_state.add_group_output(&set.group, &output);
+        workspace_state.add_group_output(&set.group, output);
 
         // Remove workspaces that prefer this output from other sets
         let mut moved_workspaces = self
@@ -1588,7 +1588,7 @@ impl Shell {
             KeyboardFocusTarget::Fullscreen(elem) => self
                 .outputs()
                 .find(|output| {
-                    let workspace = self.active_space(&output).unwrap();
+                    let workspace = self.active_space(output).unwrap();
                     workspace.get_fullscreen() == Some(&elem)
                 })
                 .cloned(),
@@ -1596,7 +1596,7 @@ impl Shell {
                 .outputs()
                 .find(|output| {
                     self.workspaces
-                        .active(&output)
+                        .active(output)
                         .unwrap()
                         .1
                         .tiling_layer
@@ -2216,7 +2216,7 @@ impl Shell {
         }
 
         {
-            let Some(workspace) = self.workspaces.space_for_handle_mut(&current_workspace) else {
+            let Some(workspace) = self.workspaces.space_for_handle_mut(current_workspace) else {
                 return;
             };
             let _ = workspace.unmap(&mapped);
@@ -2224,18 +2224,18 @@ impl Shell {
 
         let new_workspace_output = self
             .workspaces
-            .space_for_handle(&previous_workspace)
+            .space_for_handle(previous_workspace)
             .unwrap()
             .output()
             .clone();
         for (window, _) in mapped.windows() {
             toplevel_enter_output(&window, &new_workspace_output);
-            toplevel_enter_workspace(&window, &previous_workspace);
+            toplevel_enter_workspace(&window, previous_workspace);
         }
 
         let new_workspace = self
             .workspaces
-            .space_for_handle_mut(&previous_workspace)
+            .space_for_handle_mut(previous_workspace)
             .unwrap();
         match target_layer {
             ManagedLayer::Sticky => {
@@ -2514,7 +2514,7 @@ impl Shell {
                     Some(set.minimized_windows.remove(idx).window.active_window())
                 }
             } else if let Some((workspace, elem)) = set.workspaces.iter_mut().find_map(|w| {
-                w.element_for_surface(&surface)
+                w.element_for_surface(surface)
                     .cloned()
                     .map(|elem| (w, elem))
             }) {
@@ -2603,7 +2603,7 @@ impl Shell {
             {
                 to_workspace.unmaximize_request(&mapped);
             }
-            let focus_stack = seat.map(|seat| to_workspace.focus_stack.get(&seat));
+            let focus_stack = seat.map(|seat| to_workspace.focus_stack.get(seat));
             to_workspace.tiling_layer.map(
                 mapped.clone(),
                 focus_stack.as_ref().map(|x| x.iter()),
@@ -2715,12 +2715,12 @@ impl Shell {
                 node, focus_stack, ..
             })) => {
                 let new_pos = if follow {
-                    seat.set_active_output(&to_output);
+                    seat.set_active_output(to_output);
                     self.workspaces
-                        .idx_for_handle(&to_output, &to)
+                        .idx_for_handle(to_output, &to)
                         .and_then(|to_idx| {
                             self.activate(
-                                &to_output,
+                                to_output,
                                 to_idx,
                                 WorkspaceDelta::new_shortcut(),
                                 workspace_state,
@@ -2736,7 +2736,7 @@ impl Shell {
                 if let Some(from_workspace) = from_w.get_mut(0) {
                     if let Some(to_workspace) = other_w.iter_mut().find(|w| w.handle == to) {
                         {
-                            let mut stack = to_workspace.focus_stack.get_mut(&seat);
+                            let mut stack = to_workspace.focus_stack.get_mut(seat);
                             for elem in focus_stack.iter().flat_map(|node_id| {
                                 from_workspace.tiling_layer.element_for_node(node_id)
                             }) {
@@ -2761,7 +2761,7 @@ impl Shell {
                             &mut to_workspace.tiling_layer,
                             &to,
                             seat,
-                            to_workspace.focus_stack.get(&seat).iter(),
+                            to_workspace.focus_stack.get(seat).iter(),
                             NodeDesc {
                                 handle: from,
                                 node,
@@ -2782,7 +2782,7 @@ impl Shell {
                                 .collect::<Vec<_>>()
                                 .into_iter()
                             {
-                                to_workspace.toggle_floating_window(&seat, &mapped);
+                                to_workspace.toggle_floating_window(seat, &mapped);
                             }
                             to_workspace.tiling_enabled = false;
                         }
@@ -2843,7 +2843,7 @@ impl Shell {
     ) -> Option<(MenuGrab, Focus)> {
         let serial = serial.into();
         let Some(GrabStartData::Pointer(start_data)) =
-            check_grab_preconditions(&seat, serial, Some(surface))
+            check_grab_preconditions(seat, serial, Some(surface))
         else {
             return None; // TODO: an application can send a menu request for a touch event
         };
@@ -2953,7 +2953,7 @@ impl Shell {
         let serial = serial.into();
 
         let mut start_data =
-            check_grab_preconditions(&seat, serial, client_initiated.then_some(surface))?;
+            check_grab_preconditions(seat, serial, client_initiated.then_some(surface))?;
         let old_mapped = self.element_for_surface(surface).cloned()?;
         if old_mapped.is_minimized() {
             return None;
@@ -3051,7 +3051,7 @@ impl Shell {
             // if this changed the width, the window was tiled in floating mode
             if let Some(new_size) = new_size {
                 let output = workspace.output();
-                let ratio = pos.to_local(&output).x / (elem_geo.loc.x + elem_geo.size.w) as f64;
+                let ratio = pos.to_local(output).x / (elem_geo.loc.x + elem_geo.size.w) as f64;
 
                 initial_window_location = Point::from((
                     pos.x - (new_size.w as f64 * ratio),
@@ -3171,9 +3171,9 @@ impl Shell {
                 .unwrap()
                 .to_global(&set.output);
             Some(geometry)
-        } else if let Some(workspace) = self.space_for(&mapped) {
+        } else if let Some(workspace) = self.space_for(mapped) {
             let geometry = workspace
-                .element_geometry(&mapped)
+                .element_geometry(mapped)
                 .unwrap()
                 .to_global(workspace.output());
             Some(geometry)
@@ -3402,7 +3402,7 @@ impl Shell {
             return None;
         }
 
-        let mut start_data = check_grab_preconditions(&seat, None, None)?;
+        let mut start_data = check_grab_preconditions(seat, None, None)?;
 
         let (floating_layer, geometry) = if let Some(set) = self
             .workspaces
@@ -3416,9 +3416,9 @@ impl Shell {
                 .unwrap()
                 .to_global(&set.output);
             (&mut set.sticky_layer, geometry)
-        } else if let Some(workspace) = self.space_for_mut(&mapped) {
+        } else if let Some(workspace) = self.space_for_mut(mapped) {
             let geometry = workspace
-                .element_geometry(&mapped)
+                .element_geometry(mapped)
                 .unwrap()
                 .to_global(workspace.output());
             (&mut workspace.floating_layer, geometry)
@@ -3460,7 +3460,7 @@ impl Shell {
             ReleaseMode::Click,
         ) {
             grab.into()
-        } else if let Some(ws) = self.space_for_mut(&mapped) {
+        } else if let Some(ws) = self.space_for_mut(mapped) {
             let node_id = mapped.tiling_node_id.lock().unwrap().clone()?;
             let (node, left_up_idx, orientation) = ws.tiling_layer.resize_request(node_id, edge)?;
             ResizeForkGrab::new(
@@ -3512,7 +3512,7 @@ impl Shell {
                 .find(|workspace| workspace.mapped().any(|m| m == mapped))
         }) {
             let to = minimize_rectangle(workspace.output(), &mapped.active_window());
-            if let Some(minimized) = workspace.minimize(&mapped, to) {
+            if let Some(minimized) = workspace.minimize(mapped, to) {
                 workspace.minimized_windows.push(minimized);
             }
         }
@@ -3568,8 +3568,8 @@ impl Shell {
         {
             let geometry = set.sticky_layer.element_geometry(mapped).unwrap();
             (ManagedLayer::Sticky, &mut set.sticky_layer, geometry)
-        } else if let Some(workspace) = self.space_for_mut(&mapped) {
-            let layer = if workspace.is_floating(&mapped) {
+        } else if let Some(workspace) = self.space_for_mut(mapped) {
+            let layer = if workspace.is_floating(mapped) {
                 ManagedLayer::Floating
             } else {
                 ManagedLayer::Tiling
@@ -3637,7 +3637,7 @@ impl Shell {
     ) -> Option<(ResizeGrab, Focus)> {
         let serial = serial.into();
         let start_data =
-            check_grab_preconditions(&seat, serial, client_initiated.then_some(surface))?;
+            check_grab_preconditions(seat, serial, client_initiated.then_some(surface))?;
         let mapped = self.element_for_surface(surface).cloned()?;
         if mapped.is_fullscreen(true) || mapped.is_maximized(true) {
             return None;
@@ -3932,7 +3932,7 @@ impl Shell {
             }
         }
 
-        self.append_focus_stack(&mapped, seat);
+        self.append_focus_stack(mapped, seat);
     }
 
     pub fn toggle_sticky_current(&mut self, seat: &Seat<State>) {

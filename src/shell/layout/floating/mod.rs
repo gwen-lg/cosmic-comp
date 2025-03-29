@@ -281,7 +281,7 @@ impl FloatingLayout {
             layers.non_exclusive_zone()
         };
         let output_geometry = {
-            let layers = layer_map_for_output(&output);
+            let layers = layer_map_for_output(output);
             layers.non_exclusive_zone()
         };
 
@@ -660,7 +660,7 @@ impl FloatingLayout {
         let _ = self.animations.remove(window);
 
         let was_unmaped = self.space.elements().any(|e| e == window);
-        self.space.unmap_elem(&window);
+        self.space.unmap_elem(window);
 
         if was_unmaped {
             if let Some(pos) = self.spawn_order.iter().position(|w| w == window) {
@@ -679,7 +679,7 @@ impl FloatingLayout {
         to: Rectangle<i32, Local>,
     ) -> Option<(CosmicMapped, Point<i32, Local>)> {
         let previous_geometry = self.space.element_geometry(window);
-        self.space.unmap_elem(&window);
+        self.space.unmap_elem(window);
         if let Some(previous_geometry) = previous_geometry {
             if let Some(pos) = self.spawn_order.iter().position(|w| w == window) {
                 self.spawn_order.truncate(pos);
@@ -895,7 +895,7 @@ impl FloatingLayout {
         release: ReleaseMode,
     ) -> Option<ResizeSurfaceGrab> {
         if seat.get_pointer().is_some() {
-            let location = self.space.element_location(&mapped)?.as_local();
+            let location = self.space.element_location(mapped)?.as_local();
             let size = mapped.geometry().size;
             mapped.moved_since_mapped.store(true, Ordering::SeqCst);
 

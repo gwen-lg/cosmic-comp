@@ -177,7 +177,7 @@ impl CompositorHandler for State {
 
         // schedule a new render
         if let Some(output) = shell.visible_output_for_surface(surface) {
-            self.backend.schedule_render(&output);
+            self.backend.schedule_render(output);
         }
 
         if mapped {
@@ -294,8 +294,8 @@ impl State {
                 } else {
                     None
                 };
-                if toplevel_ensure_initial_configure(&toplevel, initial_size)
-                    && with_renderer_surface_state(&surface, |state| state.buffer().is_some())
+                if toplevel_ensure_initial_configure(toplevel, initial_size)
+                    && with_renderer_surface_state(surface, |state| state.buffer().is_some())
                         .unwrap_or(false)
                 {
                     let window = pending.surface.clone();

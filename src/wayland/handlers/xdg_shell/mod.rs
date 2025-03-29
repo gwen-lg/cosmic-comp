@@ -430,12 +430,12 @@ impl XdgShellHandler for State {
         {
             let dh = self.common.display_handle.clone();
             for client in clients.values() {
-                client_compositor_state(&client).blocker_cleared(self, &dh);
+                client_compositor_state(client).blocker_cleared(self, &dh);
             }
         }
 
         if let Some(output) = output.as_ref() {
-            self.backend.schedule_render(&output);
+            self.backend.schedule_render(output);
         }
     }
 

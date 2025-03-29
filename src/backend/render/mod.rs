@@ -432,7 +432,7 @@ where
     let (focal_point, zoom_scale) = zoom_state
         .map(|state| {
             (
-                state.animating_focal_point(Some(&output)).to_local(&output),
+                state.animating_focal_point(Some(output)).to_local(output),
                 state.animating_level(),
             )
         })
@@ -450,7 +450,7 @@ where
             elements.extend(
                 cursor::draw_cursor(
                     renderer,
-                    &seat,
+                    seat,
                     location,
                     scale.into(),
                     zoom_scale,
@@ -476,7 +476,7 @@ where
         }
 
         if !exclude_dnd_icon {
-            if let Some(dnd_icon) = get_dnd_icon(&seat) {
+            if let Some(dnd_icon) = get_dnd_icon(seat) {
                 elements.extend(
                     cursor::draw_dnd_icon(
                         renderer,
@@ -608,7 +608,7 @@ where
         return Ok(debug_elements);
     };
 
-    let (previous_idx, idx) = shell_guard.workspaces.active_num(&output);
+    let (previous_idx, idx) = shell_guard.workspaces.active_num(output);
     let previous_workspace = previous_workspace
         .zip(previous_idx)
         .map(|((w, start), idx)| (w.handle, idx, start));
@@ -740,7 +740,7 @@ where
     let (focal_point, zoom_scale) = zoom_level
         .map(|state| {
             (
-                state.animating_focal_point(Some(&output)).to_local(&output),
+                state.animating_focal_point(Some(output)).to_local(output),
                 state.animating_level(),
             )
         })
@@ -805,7 +805,7 @@ where
                     elements.extend(
                         render_elements_from_surface_tree::<_, WorkspaceRenderElement<_>>(
                             renderer,
-                            &layer.wl_surface(),
+                            layer.wl_surface(),
                             location
                                 .to_local(output)
                                 .as_logical()
@@ -899,7 +899,7 @@ where
                                 resize_indicator.clone(),
                                 active_hint,
                                 alpha,
-                                &theme.cosmic(),
+                                theme.cosmic(),
                             )
                             .into_iter()
                             .map(Into::into)
@@ -913,7 +913,7 @@ where
                             renderer,
                             (!move_active && is_active_space).then_some(last_active_seat),
                             overview.clone(),
-                            &theme.cosmic(),
+                            theme.cosmic(),
                         ) {
                             Ok(elements) => {
                                 elements
@@ -943,7 +943,7 @@ where
                             overview.clone(),
                             resize_indicator.clone(),
                             active_hint,
-                            &theme.cosmic(),
+                            theme.cosmic(),
                         ) {
                             Ok(elements) => {
                                 elements
@@ -1318,7 +1318,7 @@ where
             for (session, frame) in output.take_pending_frames() {
                 if let Some((frame, damage)) = render_session::<_, _, GlesTexture>(
                     renderer,
-                    &session.user_data().get::<SessionData>().unwrap(),
+                    session.user_data().get::<SessionData>().unwrap(),
                     frame,
                     output.current_transform(),
                     |buffer, renderer, offscreen, dt, age, additional_damage| {
@@ -1363,7 +1363,7 @@ where
                             elements.truncate(old_len);
                         }
 
-                        if let (Some(ref damage), _) = &res {
+                        if let (Some(damage), _) = &res {
                             let blit_to_buffer =
                                 |renderer: &mut R, blit_from: &mut R::Framebuffer<'_>| {
                                     if let Ok(dmabuf) = get_dmabuf(buffer) {
@@ -1463,7 +1463,7 @@ where
     )?;
 
     if let Some(additional_damage) = additional_damage {
-        let output_geo = output.geometry().to_local(&output).as_logical();
+        let output_geo = output.geometry().to_local(output).as_logical();
         elements.extend(
             additional_damage
                 .into_iter()

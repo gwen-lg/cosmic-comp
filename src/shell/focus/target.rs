@@ -162,7 +162,7 @@ impl KeyboardFocusTarget {
         match self {
             KeyboardFocusTarget::Element(mapped) => mapped.wl_surface(),
             KeyboardFocusTarget::Popup(PopupKind::Xdg(xdg)) => {
-                get_popup_toplevel(&xdg).map(Cow::Owned)
+                get_popup_toplevel(xdg).map(Cow::Owned)
             }
             _ => None,
         }

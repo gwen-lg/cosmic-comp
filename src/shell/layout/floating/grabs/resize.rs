@@ -554,7 +554,7 @@ impl ResizeSurfaceGrab {
                 }
                 floating_layer.space.map_element(
                     window,
-                    new_location.to_local(&output).as_logical(),
+                    new_location.to_local(output).as_logical(),
                     false,
                 );
             }

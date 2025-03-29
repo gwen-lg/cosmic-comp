@@ -356,7 +356,7 @@ where
             let retain =
                 wl_output.is_alive() && group.outputs.iter().any(|output| output.owns(wl_output));
             if !retain {
-                instance.output_leave(&wl_output);
+                instance.output_leave(wl_output);
                 changed = true;
             }
             retain

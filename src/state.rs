@@ -541,24 +541,24 @@ impl State {
         let seat_state = SeatState::<Self>::new();
         let viewporter_state = ViewporterState::new::<Self>(dh);
         let wl_drm_state = WlDrmState::<Option<DrmNode>>::default();
-        let kde_decoration_state = KdeDecorationState::new::<Self>(&dh, Mode::Client);
-        let xdg_decoration_state = XdgDecorationState::new::<Self>(&dh);
+        let kde_decoration_state = KdeDecorationState::new::<Self>(dh, Mode::Client);
+        let xdg_decoration_state = XdgDecorationState::new::<Self>(dh);
         let session_lock_manager_state =
-            SessionLockManagerState::new::<Self, _>(&dh, client_is_privileged);
-        XWaylandKeyboardGrabState::new::<Self>(&dh);
-        let xwayland_shell_state = XWaylandShellState::new::<Self>(&dh);
-        PointerConstraintsState::new::<Self>(&dh);
-        PointerGesturesState::new::<Self>(&dh);
-        TabletManagerState::new::<Self>(&dh);
-        SecurityContextState::new::<Self, _>(&dh, client_has_no_security_context);
-        InputMethodManagerState::new::<Self, _>(&dh, client_is_privileged);
-        TextInputManagerState::new::<Self>(&dh);
-        VirtualKeyboardManagerState::new::<State, _>(&dh, client_is_privileged);
-        AlphaModifierState::new::<Self>(&dh);
-        SinglePixelBufferState::new::<Self>(&dh);
+            SessionLockManagerState::new::<Self, _>(dh, client_is_privileged);
+        XWaylandKeyboardGrabState::new::<Self>(dh);
+        let xwayland_shell_state = XWaylandShellState::new::<Self>(dh);
+        PointerConstraintsState::new::<Self>(dh);
+        PointerGesturesState::new::<Self>(dh);
+        TabletManagerState::new::<Self>(dh);
+        SecurityContextState::new::<Self, _>(dh, client_has_no_security_context);
+        InputMethodManagerState::new::<Self, _>(dh, client_is_privileged);
+        TextInputManagerState::new::<Self>(dh);
+        VirtualKeyboardManagerState::new::<State, _>(dh, client_is_privileged);
+        AlphaModifierState::new::<Self>(dh);
+        SinglePixelBufferState::new::<Self>(dh);
 
-        let idle_notifier_state = IdleNotifierState::<Self>::new(&dh, handle.clone());
-        let idle_inhibit_manager_state = IdleInhibitManagerState::new::<State>(&dh);
+        let idle_notifier_state = IdleNotifierState::<Self>::new(dh, handle.clone());
+        let idle_inhibit_manager_state = IdleInhibitManagerState::new::<State>(dh);
         let idle_inhibiting_surfaces = HashSet::new();
 
         let data_control_state = crate::utils::env::bool_var("COSMIC_DATA_CONTROL_ENABLED")
@@ -819,7 +819,7 @@ impl Common {
                         .and_then(|source| dmabuf_feedback(source))
                 {
                     send_dmabuf_feedback_surface_tree(
-                        &lock_surface.wl_surface(),
+                        lock_surface.wl_surface(),
                         output,
                         surface_primary_scanout_output,
                         |surface, _| {

@@ -115,7 +115,7 @@ fn render_input_order_internal<R: 'static>(
         Some((previous, previous_idx, start)) => {
             let layout = shell.workspaces.layout;
 
-            let Some(workspace) = shell.workspaces.space_for_handle(&previous) else {
+            let Some(workspace) = shell.workspaces.space_for_handle(previous) else {
                 return ControlFlow::Break(Err(OutputNoMode));
             };
             let has_fullscreen = workspace.fullscreen.is_some();

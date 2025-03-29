@@ -470,7 +470,7 @@ impl XwmHandler for State {
                     set.sticky_layer
                         .element_geometry(mapped)
                         .unwrap()
-                        .to_global(&output),
+                        .to_global(output),
                 )
             } else {
                 None
