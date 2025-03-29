@@ -73,7 +73,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --profile=test --all
+          args: --locked --profile=test --all
 
       - name: "Cargo doc"
         if: $${{ always() }}
@@ -82,11 +82,12 @@ jobs:
 
       - name: Clippy
         if: $${{ always() }}
-        run: cargo clippy --all-targets
+        run: cargo clippy --locked --all-targets
+
       - name: Test features
         uses: actions-rs/cargo@v1
         env:
           RUST_BACKTRACE: full
         with:
           command: test
-          args: --all-features
+          args: --locked --all-features
