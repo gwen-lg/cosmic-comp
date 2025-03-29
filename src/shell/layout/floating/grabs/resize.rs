@@ -360,10 +360,10 @@ impl TouchGrab<State> for ResizeSurfaceGrab {
         event: &TouchMotionEvent,
         seq: Serial,
     ) {
-        if event.slot == <Self as TouchGrab<State>>::start_data(self).slot {
-            if self.update_location(event.location.as_global()) {
-                handle.unset_grab(self, data);
-            }
+        if event.slot == <Self as TouchGrab<State>>::start_data(self).slot
+            && self.update_location(event.location.as_global())
+        {
+            handle.unset_grab(self, data);
         }
 
         handle.motion(data, None, event, seq);

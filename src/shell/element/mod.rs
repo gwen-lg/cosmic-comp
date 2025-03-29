@@ -264,10 +264,8 @@ impl CosmicMapped {
                 return false;
             };
 
-            if surface_type.contains(WindowSurfaceType::TOPLEVEL) {
-                if *toplevel == *surface {
-                    return true;
-                }
+            if surface_type.contains(WindowSurfaceType::TOPLEVEL) && *toplevel == *surface {
+                return true;
             }
 
             if surface_type.contains(WindowSurfaceType::SUBSURFACE) {

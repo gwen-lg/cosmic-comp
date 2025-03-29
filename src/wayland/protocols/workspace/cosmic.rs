@@ -502,30 +502,29 @@ where
         handle_state.states = Some(workspace.states);
         changed = true;
     }
-    if instance.version() >= zcosmic_workspace_handle_v1::EVT_TILING_STATE_SINCE {
-        if handle_state
+    if instance.version() >= zcosmic_workspace_handle_v1::EVT_TILING_STATE_SINCE
+        && handle_state
             .tiling
             .map(|state| state != workspace.tiling)
             .unwrap_or(true)
-        {
-            let tiling_state = match workspace.tiling {
-                zcosmic_workspace_handle_v2::TilingState::FloatingOnly => {
-                    zcosmic_workspace_handle_v1::TilingState::FloatingOnly
-                }
-                zcosmic_workspace_handle_v2::TilingState::TilingEnabled => {
-                    zcosmic_workspace_handle_v1::TilingState::TilingEnabled
-                }
-                _ => {
-                    // Not clear what to do if state doesn't match. Which
-                    // shouldn't happen (or protocol will be irrelevant by
-                    // then).
-                    zcosmic_workspace_handle_v1::TilingState::TilingEnabled
-                }
-            };
-            instance.tiling_state(tiling_state);
-            handle_state.tiling = Some(workspace.tiling);
-            changed = true;
-        }
+    {
+        let tiling_state = match workspace.tiling {
+            zcosmic_workspace_handle_v2::TilingState::FloatingOnly => {
+                zcosmic_workspace_handle_v1::TilingState::FloatingOnly
+            }
+            zcosmic_workspace_handle_v2::TilingState::TilingEnabled => {
+                zcosmic_workspace_handle_v1::TilingState::TilingEnabled
+            }
+            _ => {
+                // Not clear what to do if state doesn't match. Which
+                // shouldn't happen (or protocol will be irrelevant by
+                // then).
+                zcosmic_workspace_handle_v1::TilingState::TilingEnabled
+            }
+        };
+        instance.tiling_state(tiling_state);
+        handle_state.tiling = Some(workspace.tiling);
+        changed = true;
     }
 
     changed

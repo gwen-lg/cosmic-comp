@@ -919,10 +919,8 @@ impl KmsState {
                         None
                     };
 
-                if !test_only {
-                    if mirrored_output != surface.output.mirroring() {
-                        surface.set_mirroring(mirrored_output.clone());
-                    }
+                if !test_only && mirrored_output != surface.output.mirroring() {
+                    surface.set_mirroring(mirrored_output.clone());
                 }
             }
         }

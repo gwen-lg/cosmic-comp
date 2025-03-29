@@ -1208,16 +1208,14 @@ impl Workspace {
             );
 
             let mut full_geo = Rectangle::from_size(self.output.geometry().size.as_local());
-            if fullscreen.start_at.is_none() {
-                if bbox != full_geo {
-                    if bbox.size.w < full_geo.size.w {
-                        full_geo.loc.x += (full_geo.size.w - bbox.size.w) / 2;
-                        full_geo.size.w = bbox.size.w;
-                    }
-                    if bbox.size.h < full_geo.size.h {
-                        full_geo.loc.y += (full_geo.size.h - bbox.size.h) / 2;
-                        full_geo.size.h = bbox.size.h;
-                    }
+            if fullscreen.start_at.is_none() && bbox != full_geo {
+                if bbox.size.w < full_geo.size.w {
+                    full_geo.loc.x += (full_geo.size.w - bbox.size.w) / 2;
+                    full_geo.size.w = bbox.size.w;
+                }
+                if bbox.size.h < full_geo.size.h {
+                    full_geo.loc.y += (full_geo.size.h - bbox.size.h) / 2;
+                    full_geo.size.h = bbox.size.h;
                 }
             }
 
@@ -1411,16 +1409,14 @@ impl Workspace {
             );
 
             let mut full_geo = Rectangle::from_size(self.output.geometry().size.as_local());
-            if fullscreen.start_at.is_none() {
-                if bbox != full_geo {
-                    if bbox.size.w < full_geo.size.w {
-                        full_geo.loc.x += (full_geo.size.w - bbox.size.w) / 2;
-                        full_geo.size.w = bbox.size.w;
-                    }
-                    if bbox.size.h < full_geo.size.h {
-                        full_geo.loc.y += (full_geo.size.h - bbox.size.h) / 2;
-                        full_geo.size.h = bbox.size.h;
-                    }
+            if fullscreen.start_at.is_none() && bbox != full_geo {
+                if bbox.size.w < full_geo.size.w {
+                    full_geo.loc.x += (full_geo.size.w - bbox.size.w) / 2;
+                    full_geo.size.w = bbox.size.w;
+                }
+                if bbox.size.h < full_geo.size.h {
+                    full_geo.loc.y += (full_geo.size.h - bbox.size.h) / 2;
+                    full_geo.size.h = bbox.size.h;
                 }
             }
 

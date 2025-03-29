@@ -239,38 +239,39 @@ fn update_focus_state(
 ) {
     // update keyboard focus
     if let Some(keyboard) = seat.get_keyboard() {
-        if should_update_cursor && state.common.config.cosmic_conf.cursor_follows_focus {
-            if target.is_some() {
-                //need to borrow mutably for surface under
-                let shell = state.common.shell.read().unwrap();
-                // get the top left corner of the target element
-                let geometry = shell.focused_geometry(target.unwrap());
-                if let Some(geometry) = geometry {
-                    // get the center of the target element
-                    let window_center = Point::from((geometry.size.w / 2, geometry.size.h / 2));
-                    let new_pos = (geometry.loc + window_center).to_f64();
+        if should_update_cursor
+            && state.common.config.cosmic_conf.cursor_follows_focus
+            && target.is_some()
+        {
+            //need to borrow mutably for surface under
+            let shell = state.common.shell.read().unwrap();
+            // get the top left corner of the target element
+            let geometry = shell.focused_geometry(target.unwrap());
+            if let Some(geometry) = geometry {
+                // get the center of the target element
+                let window_center = Point::from((geometry.size.w / 2, geometry.size.h / 2));
+                let new_pos = (geometry.loc + window_center).to_f64();
 
-                    // create a pointer target from the target element
-                    let output = shell
-                        .outputs()
-                        .find(|output| output.geometry().to_f64().contains(new_pos))
-                        .cloned()
-                        .unwrap_or(seat.active_output());
+                // create a pointer target from the target element
+                let output = shell
+                    .outputs()
+                    .find(|output| output.geometry().to_f64().contains(new_pos))
+                    .cloned()
+                    .unwrap_or(seat.active_output());
 
-                    let focus = State::surface_under(new_pos, &output, &*shell)
-                        .map(|(focus, loc)| (focus, loc.as_logical()));
-                    //drop here to avoid multiple borrows
-                    mem::drop(shell);
-                    seat.get_pointer().unwrap().motion(
-                        state,
-                        focus,
-                        &MotionEvent {
-                            location: new_pos.as_logical(),
-                            serial: SERIAL_COUNTER.next_serial(),
-                            time: 0,
-                        },
-                    );
-                }
+                let focus = State::surface_under(new_pos, &output, &*shell)
+                    .map(|(focus, loc)| (focus, loc.as_logical()));
+                //drop here to avoid multiple borrows
+                mem::drop(shell);
+                seat.get_pointer().unwrap().motion(
+                    state,
+                    focus,
+                    &MotionEvent {
+                        location: new_pos.as_logical(),
+                        serial: SERIAL_COUNTER.next_serial(),
+                        time: 0,
+                    },
+                );
             }
         }
 
@@ -608,10 +609,10 @@ fn exclusive_layer_surface_layer(shell: &Shell) -> Option<Layer> {
     for output in shell.outputs() {
         for layer_surface in layer_map_for_output(output).layers() {
             let data = layer_surface.cached_state();
-            if data.keyboard_interactivity == KeyboardInteractivity::Exclusive {
-                if data.layer as u32 >= layer.unwrap_or(Layer::Top) as u32 {
-                    layer = Some(data.layer);
-                }
+            if data.keyboard_interactivity == KeyboardInteractivity::Exclusive
+                && data.layer as u32 >= layer.unwrap_or(Layer::Top) as u32
+            {
+                layer = Some(data.layer);
             }
         }
     }

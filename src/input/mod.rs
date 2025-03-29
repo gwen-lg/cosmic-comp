@@ -350,11 +350,10 @@ impl State {
                             .get::<ResizeGrabMarker>()
                             .map(|marker| marker.get())
                             .unwrap_or(false)
+                            && output != current_output
                         {
-                            if output != current_output {
-                                ptr.frame(self);
-                                return;
-                            }
+                            ptr.frame(self);
+                            return;
                         }
                         //If the pointer isn't grabbed, we should check if the focused element should be updated
                     } else if self.common.config.cosmic_conf.focus_follows_cursor {
@@ -1679,28 +1678,29 @@ impl State {
                 .active_virtual_mods
                 .remove(&event.key_code());
             // If `Caps_Lock` is a virtual modifier, and is in locked state, clear it
-            if removed && handle.modified_sym() == Keysym::Caps_Lock {
-                if (modifiers.serialized.locked & 2) != 0 {
-                    let serial = SERIAL_COUNTER.next_serial();
-                    let time = self.common.clock.now().as_millis();
-                    keyboard.input(
-                        self,
-                        event.key_code(),
-                        KeyState::Pressed,
-                        serial,
-                        time,
-                        |_, _, _| FilterResult::<()>::Forward,
-                    );
-                    let serial = SERIAL_COUNTER.next_serial();
-                    keyboard.input(
-                        self,
-                        event.key_code(),
-                        KeyState::Released,
-                        serial,
-                        time,
-                        |_, _, _| FilterResult::<()>::Forward,
-                    );
-                }
+            if removed
+                && handle.modified_sym() == Keysym::Caps_Lock
+                && (modifiers.serialized.locked & 2) != 0
+            {
+                let serial = SERIAL_COUNTER.next_serial();
+                let time = self.common.clock.now().as_millis();
+                keyboard.input(
+                    self,
+                    event.key_code(),
+                    KeyState::Pressed,
+                    serial,
+                    time,
+                    |_, _, _| FilterResult::<()>::Forward,
+                );
+                let serial = SERIAL_COUNTER.next_serial();
+                keyboard.input(
+                    self,
+                    event.key_code(),
+                    KeyState::Released,
+                    serial,
+                    time,
+                    |_, _, _| FilterResult::<()>::Forward,
+                );
             }
         } else if event.state() == KeyState::Pressed
             && self
@@ -1980,19 +1980,18 @@ impl State {
                         }
                     }
                     Stage::LayerSurface { layer, location } => {
-                        if layer.can_receive_keyboard_focus() {
-                            if under_from_surface_tree(
+                        if layer.can_receive_keyboard_focus()
+                            && under_from_surface_tree(
                                 layer.wl_surface(),
                                 global_pos.as_logical(),
                                 location.as_logical(),
                                 WindowSurfaceType::TOPLEVEL | WindowSurfaceType::SUBSURFACE,
                             )
                             .is_some()
-                            {
-                                return ControlFlow::Break(Ok(Some(
-                                    KeyboardFocusTarget::LayerSurface(layer),
-                                )));
-                            }
+                        {
+                            return ControlFlow::Break(Ok(Some(
+                                KeyboardFocusTarget::LayerSurface(layer),
+                            )));
                         }
                     }
                     Stage::OverrideRedirect { .. } => {
