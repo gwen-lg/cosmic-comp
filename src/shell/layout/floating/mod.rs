@@ -1508,14 +1508,14 @@ impl FloatingLayout {
                                         .to_physical_precise_round(output_scale),
                                     scale,
                                 );
-                                let relocated = RelocateRenderElement::from_element(
+
+                                RelocateRenderElement::from_element(
                                     rescaled,
                                     (geometry.loc - original_geo.loc)
                                         .as_logical()
                                         .to_physical_precise_round(output_scale),
                                     Relocate::Relative,
-                                );
-                                relocated
+                                )
                             })
                         }
                         CosmicMappedRenderElement::Window(elem) => {
@@ -1528,14 +1528,14 @@ impl FloatingLayout {
                                         .to_physical_precise_round(output_scale),
                                     scale,
                                 );
-                                let relocated = RelocateRenderElement::from_element(
+
+                                RelocateRenderElement::from_element(
                                     rescaled,
                                     (geometry.loc - original_geo.loc)
                                         .as_logical()
                                         .to_physical_precise_round(output_scale),
                                     Relocate::Relative,
-                                );
-                                relocated
+                                )
                             })
                         }
                         x => x,
