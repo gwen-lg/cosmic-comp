@@ -178,7 +178,7 @@ impl ToplevelManagementHandler for State {
                 workspace.fullscreen_request(window, None, from, &seat);
             } else if let Some((output, handle)) = shell
                 .space_for(&mapped)
-                .map(|workspace| (workspace.output.clone(), workspace.handle.clone()))
+                .map(|workspace| (workspace.output.clone(), workspace.handle))
             {
                 let from = minimize_rectangle(&output, window);
                 shell
@@ -199,7 +199,7 @@ impl ToplevelManagementHandler for State {
         if let Some(mapped) = shell.element_for_surface(window).cloned() {
             if let Some(workspace) = shell.space_for_mut(&mapped) {
                 if let Some((layer, previous_workspace)) = workspace.unfullscreen_request(window) {
-                    let old_handle = workspace.handle.clone();
+                    let old_handle = workspace.handle;
                     let new_workspace_handle = shell
                         .workspaces
                         .space_for_handle(&previous_workspace)

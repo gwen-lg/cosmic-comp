@@ -94,7 +94,7 @@ pub fn update_reactive_popups<'a>(
                         .unwrap()
                         .lock()
                         .unwrap();
-                    attributes.current.positioner.clone()
+                    attributes.current.positioner
                 });
                 if positioner.reactive {
                     let anchor_point = loc + positioner.get_anchor_point().as_global();

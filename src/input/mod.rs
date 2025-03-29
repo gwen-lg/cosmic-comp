@@ -1561,7 +1561,7 @@ impl State {
                 );
             } else if !cosmic_modifiers_eq_smithay(&action_pattern.modifiers, modifiers) {
                 let mut new_pattern = action_pattern.clone();
-                new_pattern.modifiers = cosmic_modifiers_from_smithay(modifiers.clone());
+                new_pattern.modifiers = cosmic_modifiers_from_smithay(*modifiers);
                 let enabled =
                     self.common
                         .config
@@ -1607,7 +1607,7 @@ impl State {
                     cosmic_keystate_from_smithay(event.state()),
                 ));
                 let key_pattern = shortcuts::Binding {
-                    modifiers: cosmic_modifiers_from_smithay(modifiers.clone()),
+                    modifiers: cosmic_modifiers_from_smithay(*modifiers),
                     key: Some(handle.modified_sym()),
                     description: None,
                 };

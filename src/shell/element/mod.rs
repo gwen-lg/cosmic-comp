@@ -490,7 +490,7 @@ impl CosmicMapped {
     pub fn set_bounds(&self, size: impl Into<Option<Size<i32, Logical>>>) {
         let size = size.into();
         for (surface, _) in self.windows() {
-            surface.set_bounds(size.clone())
+            surface.set_bounds(size)
         }
     }
 
@@ -559,7 +559,7 @@ impl CosmicMapped {
                 let handle = window.loop_handle();
 
                 let stack = CosmicStack::new(std::iter::once(surface), handle, theme);
-                if let Some(geo) = self.last_geometry.lock().unwrap().clone() {
+                if let Some(geo) = *self.last_geometry.lock().unwrap() {
                     stack.set_geometry(geo.to_global(output));
                 }
                 stack.output_enter(output, overlap);
@@ -584,7 +584,7 @@ impl CosmicMapped {
         surface.set_tiled(false);
         let window = CosmicWindow::new(surface, handle, theme);
 
-        if let Some(geo) = self.last_geometry.lock().unwrap().clone() {
+        if let Some(geo) = *self.last_geometry.lock().unwrap() {
             window.set_geometry(geo.to_global(output));
         }
         window.output_enter(output, overlap);

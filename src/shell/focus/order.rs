@@ -347,7 +347,7 @@ fn layer_popups<'a>(
     element_filter: ElementFilter,
 ) -> impl Iterator<Item = (LayerSurface, PopupKind, Point<i32, Global>)> + 'a {
     layer_surfaces(output, layer, element_filter).flat_map(move |(surface, location)| {
-        let location_clone = location.clone();
+        let location_clone = location;
         let surface_clone = surface.clone();
         PopupManager::popups_for_surface(surface.wl_surface()).map(move |(popup, popup_offset)| {
             let offset = (popup_offset - popup.geometry().loc).as_global();

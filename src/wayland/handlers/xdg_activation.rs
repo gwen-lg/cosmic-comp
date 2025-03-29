@@ -124,7 +124,7 @@ impl XdgActivationHandler for State {
                             shell.unminimize_request(&element, &seat);
                         }
 
-                        let element_workspace = shell.space_for(&element).map(|w| w.handle.clone());
+                        let element_workspace = shell.space_for(&element).map(|w| w.handle);
                         let current_workspace = shell.active_space_mut(&current_output).unwrap();
 
                         let in_current_workspace = element_workspace
@@ -187,7 +187,7 @@ impl XdgActivationHandler for State {
             } else {
                 shell
                     .pending_activations
-                    .insert(ActivationKey::Wayland(surface), context.clone());
+                    .insert(ActivationKey::Wayland(surface), *context);
             }
         }
     }

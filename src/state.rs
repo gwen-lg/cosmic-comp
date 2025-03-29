@@ -157,7 +157,7 @@ impl ClientData for ClientState {
 pub fn advertised_node_for_client(client: &Client) -> Option<DrmNode> {
     // Lets check the global drm-node the client got either through default-feedback or wl_drm
     if let Some(normal_client) = client.get_data::<ClientState>() {
-        return normal_client.advertised_drm_node.clone();
+        return normal_client.advertised_drm_node;
     }
     // last but not least all xwayland-surfaces should also share a single node
     if let Some(xwayland_client) = client.get_data::<XWaylandClientData>() {

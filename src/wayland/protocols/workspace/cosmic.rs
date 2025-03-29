@@ -376,7 +376,7 @@ where
             .flat_map(|cap| (cap as u32).to_ne_bytes())
             .collect::<Vec<u8>>();
         instance.capabilities(caps);
-        handle_state.capabilities = Some(group.capabilities.clone());
+        handle_state.capabilities = Some(group.capabilities);
         changed = true;
     }
 
@@ -477,7 +477,7 @@ where
             .flat_map(|cap| (cap as u32).to_ne_bytes())
             .collect::<Vec<u8>>();
         instance.capabilities(caps);
-        handle_state.capabilities = Some(workspace.capabilities.clone());
+        handle_state.capabilities = Some(workspace.capabilities);
         changed = true;
     }
     if handle_state.states != Some(workspace.states) {
@@ -499,7 +499,7 @@ where
             .flat_map(|state| (state as u32).to_ne_bytes())
             .collect::<Vec<u8>>();
         instance.state(states);
-        handle_state.states = Some(workspace.states.clone());
+        handle_state.states = Some(workspace.states);
         changed = true;
     }
     if instance.version() >= zcosmic_workspace_handle_v1::EVT_TILING_STATE_SINCE {

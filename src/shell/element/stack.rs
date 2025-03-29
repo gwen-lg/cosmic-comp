@@ -181,7 +181,7 @@ impl CosmicStack {
                 *prev_idx = last_mod_serial.map(|s| (s, p.active.load(Ordering::SeqCst)));
             }
 
-            if let Some(mut geo) = p.geometry.lock().unwrap().clone() {
+            if let Some(mut geo) = *p.geometry.lock().unwrap() {
                 geo.loc.y += TAB_HEIGHT;
                 geo.size.h -= TAB_HEIGHT;
                 window.set_geometry(geo, TAB_HEIGHT as u32);
@@ -538,13 +538,8 @@ impl CosmicStack {
     }
 
     pub fn pending_size(&self) -> Option<Size<i32, Logical>> {
-        self.0.with_program(|p| {
-            p.geometry
-                .lock()
-                .unwrap()
-                .clone()
-                .map(|geo| geo.size.as_logical())
-        })
+        self.0
+            .with_program(|p| (*p.geometry.lock().unwrap()).map(|geo| geo.size.as_logical()))
     }
 
     pub fn set_geometry(&self, geo: Rectangle<i32, Global>) {

@@ -346,7 +346,7 @@ impl XwmHandler for State {
         {
             shell.pending_activations.insert(
                 crate::shell::ActivationKey::X11(window.window_id()),
-                context.clone(),
+                *context,
             );
         }
 
@@ -380,7 +380,7 @@ impl XwmHandler for State {
                     {
                         shell.pending_activations.insert(
                             crate::shell::ActivationKey::X11(surface.window_id()),
-                            context.clone(),
+                            *context,
                         );
                     }
                 }
@@ -668,7 +668,7 @@ impl XwmHandler for State {
         if let Some(mapped) = shell.element_for_surface(&window).cloned() {
             if let Some((output, handle)) = shell
                 .space_for(&mapped)
-                .map(|workspace| (workspace.output.clone(), workspace.handle.clone()))
+                .map(|workspace| (workspace.output.clone(), workspace.handle))
             {
                 if let Some((surface, _)) = mapped
                     .windows()

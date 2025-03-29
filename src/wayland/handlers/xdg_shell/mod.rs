@@ -294,7 +294,7 @@ impl XdgShellHandler for State {
                     mapped
                 };
 
-                let workspace_handle = shell.active_space(&output).unwrap().handle.clone();
+                let workspace_handle = shell.active_space(&output).unwrap().handle;
                 for (window, _) in mapped.windows() {
                     toplevel_enter_output(&window, &output);
                     toplevel_enter_workspace(&window, &workspace_handle);
@@ -338,9 +338,9 @@ impl XdgShellHandler for State {
                         let layer = workspace.unmap(&mapped).unwrap().layer;
                         (mapped, layer)
                     };
-                    let handle = workspace.handle.clone();
+                    let handle = workspace.handle;
 
-                    let workspace_handle = shell.active_space(&output).unwrap().handle.clone();
+                    let workspace_handle = shell.active_space(&output).unwrap().handle;
                     for (window, _) in mapped.windows() {
                         toplevel_enter_output(&window, &output);
                         toplevel_enter_workspace(&window, &workspace_handle);
@@ -381,7 +381,7 @@ impl XdgShellHandler for State {
                     .find(|(w, _)| w.wl_surface().as_deref() == Some(surface.wl_surface()))
                     .unwrap();
                 if let Some((layer, previous_workspace)) = workspace.unfullscreen_request(&window) {
-                    let old_handle = workspace.handle.clone();
+                    let old_handle = workspace.handle;
                     let new_workspace_handle = shell
                         .workspaces
                         .space_for_handle(&previous_workspace)

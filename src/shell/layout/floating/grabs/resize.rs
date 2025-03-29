@@ -513,7 +513,7 @@ impl ResizeSurfaceGrab {
 
                     if edges.intersects(ResizeEdge::TOP_LEFT) {
                         let size = window.geometry().size;
-                        let mut new = location.clone();
+                        let mut new = location;
                         if edges.intersects(ResizeEdge::LEFT) {
                             new.x = initial_window_location.x + (initial_window_size.w - size.w);
                         }

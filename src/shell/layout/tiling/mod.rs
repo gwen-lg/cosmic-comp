@@ -811,7 +811,7 @@ impl TilingLayout {
                     .push_tree(other_tree, ANIMATION_DURATION, blocker);
 
                 other.node_desc_to_focus(&NodeDesc {
-                    handle: other_handle.clone(),
+                    handle: *other_handle,
                     node: id.clone(),
                     stack_window: None,
                     focus_stack: Vec::new(), // node_desc_to_focus doesn't use this
@@ -1313,7 +1313,7 @@ impl TilingLayout {
             .unwrap()
             .data_mut();
         *data = Data::Placeholder {
-            last_geometry: data.geometry().clone(),
+            last_geometry: *data.geometry(),
             initial_placeholder: true,
         };
 
@@ -2698,7 +2698,7 @@ impl TilingLayout {
             }
             Some(TargetZone::InitialPlaceholder(node_id)) if tree.get(node_id).is_ok() => {
                 let data = tree.get_mut(node_id).unwrap().data_mut();
-                let geo = data.geometry().clone();
+                let geo = *data.geometry();
 
                 *data = Data::Mapped {
                     mapped: window.clone(),
@@ -3812,7 +3812,7 @@ impl TilingLayout {
                             mapped,
                             last_geometry,
                             ..
-                        } => (mapped, last_geometry.clone()),
+                        } => (mapped, *last_geometry),
                         _ => unreachable!(),
                     })
                     .chain(
@@ -3828,7 +3828,7 @@ impl TilingLayout {
                                     mapped,
                                     last_geometry,
                                     ..
-                                } => (mapped, last_geometry.clone()),
+                                } => (mapped, *last_geometry),
                                 _ => unreachable!(),
                             }),
                     ),
@@ -3843,7 +3843,7 @@ impl TilingLayout {
         self.mapped().flat_map(|(mapped, geo)| {
             mapped.windows().map(move |(w, p)| {
                 (w, {
-                    let mut geo = geo.clone();
+                    let mut geo = geo;
                     geo.loc += p.as_local();
                     geo.size -= p.to_size().as_local();
                     geo
@@ -4002,7 +4002,7 @@ impl TilingLayout {
                     &self.placeholder_id,
                     is_mouse_tiling,
                     swap_desc.clone(),
-                    overview.1.as_ref().and_then(|(_, tree)| tree.clone()),
+                    overview.1.as_ref().and_then(|(_, tree)| *tree),
                     theme,
                 ))
             } else {
@@ -4039,7 +4039,7 @@ impl TilingLayout {
                 &self.placeholder_id,
                 is_mouse_tiling,
                 swap_desc.clone(),
-                overview.1.as_ref().and_then(|(_, tree)| tree.clone()),
+                overview.1.as_ref().and_then(|(_, tree)| *tree),
                 theme,
             ))
         } else {
@@ -4151,7 +4151,7 @@ impl TilingLayout {
                     &self.placeholder_id,
                     is_mouse_tiling,
                     swap_desc.clone(),
-                    overview.1.as_ref().and_then(|(_, tree)| tree.clone()),
+                    overview.1.as_ref().and_then(|(_, tree)| *tree),
                     theme,
                 ))
             } else {
@@ -4186,7 +4186,7 @@ impl TilingLayout {
                 &self.placeholder_id,
                 is_mouse_tiling,
                 swap_desc.clone(),
-                overview.1.as_ref().and_then(|(_, tree)| tree.clone()),
+                overview.1.as_ref().and_then(|(_, tree)| *tree),
                 theme,
             ))
         } else {
@@ -5247,7 +5247,7 @@ where
         let swap_geo = ease(
             Linear,
             EaseRectangle({
-                let mut geo = focused_geo.clone();
+                let mut geo = focused_geo;
                 geo.loc.x += STACK_TAB_HEIGHT;
                 geo.size.h -= STACK_TAB_HEIGHT;
                 geo
@@ -5312,7 +5312,7 @@ where
                 || focused.as_ref() == Some(&node_id)
             {
                 if indicator_thickness > 0 || data.is_group() {
-                    let mut geo = geo.clone();
+                    let mut geo = geo;
 
                     if data.is_group() {
                         let outer_gap: i32 = (if is_overview { GAP_KEYBOARD } else { 4 } as f32
@@ -5399,7 +5399,7 @@ where
                 }
 
                 if let Some((mode, resize)) = resize_indicator.as_mut() {
-                    let mut geo = geo.clone();
+                    let mut geo = geo;
                     geo.loc -= (18, 18).into();
                     geo.size += (36, 36).into();
 

@@ -284,7 +284,7 @@ pub fn toplevel_leave_output(toplevel: &impl Window, output: &Output) {
 
 pub fn toplevel_enter_workspace(toplevel: &impl Window, workspace: &WorkspaceHandle) {
     if let Some(state) = toplevel.user_data().get::<ToplevelState>() {
-        state.lock().unwrap().workspaces.push(workspace.clone());
+        state.lock().unwrap().workspaces.push(*workspace);
     }
 }
 

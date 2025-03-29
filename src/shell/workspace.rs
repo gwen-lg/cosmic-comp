@@ -999,7 +999,7 @@ impl Workspace {
             for window in floating_windows.iter().filter(|w| w.is_maximized(false)) {
                 let original_geometry = {
                     let state = window.maximized_state.lock().unwrap();
-                    state.as_ref().unwrap().original_geometry.clone()
+                    state.as_ref().unwrap().original_geometry
                 };
                 self.unmaximize_request(window);
                 maximized_windows.push((window.clone(), ManagedLayer::Tiling, original_geometry));
@@ -1024,7 +1024,7 @@ impl Workspace {
                 if window.is_maximized(false) {
                     let original_geometry = {
                         let state = window.maximized_state.lock().unwrap();
-                        state.as_ref().unwrap().original_geometry.clone()
+                        state.as_ref().unwrap().original_geometry
                     };
                     self.unmaximize_request(&window);
                     maximized_windows.push((
@@ -1132,7 +1132,7 @@ impl Workspace {
                             .unwrap()
                             .clone()
                             .map(|node_id| NodeDesc {
-                                handle: self.handle.clone(),
+                                handle: self.handle,
                                 node: node_id.clone(),
                                 stack_window: if mapped
                                     .stack_ref()
@@ -1153,7 +1153,7 @@ impl Workspace {
             KeyboardFocusTarget::Group(WindowGroup {
                 node, focus_stack, ..
             }) => Some(NodeDesc {
-                handle: self.handle.clone(),
+                handle: self.handle,
                 node,
                 stack_window: None,
                 focus_stack,

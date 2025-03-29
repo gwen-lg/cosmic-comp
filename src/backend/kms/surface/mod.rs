@@ -711,7 +711,7 @@ impl SurfaceThreadState {
 
         let now = self.clock.now();
         let presentation_time = match metadata.as_ref().map(|data| &data.time) {
-            Some(DrmEventTime::Monotonic(tp)) => Some(tp.clone()),
+            Some(DrmEventTime::Monotonic(tp)) => Some(*tp),
             _ => None,
         };
         let sequence = metadata.as_ref().map(|data| data.sequence).unwrap_or(0);
@@ -852,7 +852,7 @@ impl SurfaceThreadState {
             }
             QueueState::WaitingForEstimatedVBlank(estimated_vblank) => {
                 self.state = QueueState::WaitingForEstimatedVBlankAndQueued {
-                    estimated_vblank: estimated_vblank.clone(),
+                    estimated_vblank: *estimated_vblank,
                     queued_render: token,
                 };
             }
@@ -866,7 +866,7 @@ impl SurfaceThreadState {
             } if force => {
                 self.loop_handle.remove(*queued_render);
                 self.state = QueueState::WaitingForEstimatedVBlankAndQueued {
-                    estimated_vblank: estimated_vblank.clone(),
+                    estimated_vblank: *estimated_vblank,
                     queued_render: token,
                 };
             }

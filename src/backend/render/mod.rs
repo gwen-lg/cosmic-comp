@@ -682,7 +682,7 @@ where
     elements.extend(cursor_elements(
         renderer,
         seats.iter(),
-        zoom_level.clone(),
+        zoom_level,
         &theme,
         now,
         output,

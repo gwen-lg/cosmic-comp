@@ -1733,7 +1733,7 @@ impl Shell {
                 .workspaces
                 .spaces()
                 .find(move |workspace| workspace.output() == output)
-                .map(|w| (w.handle.clone(), output.clone())),
+                .map(|w| (w.handle, output.clone())),
             None => self
                 .workspaces
                 .spaces()
@@ -1744,7 +1744,7 @@ impl Shell {
                             .iter()
                             .any(|m| m.window.has_surface(surface, WindowSurfaceType::ALL))
                 })
-                .map(|w| (w.handle.clone(), w.output().clone())),
+                .map(|w| (w.handle, w.output().clone())),
         }
     }
 
@@ -2320,7 +2320,7 @@ impl Shell {
         }
 
         if let Some((mapped, layer, previous_workspace)) = workspace.remove_fullscreen() {
-            let old_handle = workspace.handle.clone();
+            let old_handle = workspace.handle;
             let new_workspace_handle = self
                 .workspaces
                 .space_for_handle(&previous_workspace)
@@ -2615,7 +2615,7 @@ impl Shell {
             if to_workspace.fullscreen.is_some() {
                 if let Some((mapped, layer, previous_workspace)) = to_workspace.remove_fullscreen()
                 {
-                    let old_handle = to.clone();
+                    let old_handle = *to;
                     let new_workspace_handle = self
                         .workspaces
                         .space_for_handle(&previous_workspace)

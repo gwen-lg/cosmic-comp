@@ -349,7 +349,7 @@ where
 
     if handle_state.capabilities != Some(group.capabilities) {
         instance.capabilities(group.capabilities);
-        handle_state.capabilities = Some(group.capabilities.clone());
+        handle_state.capabilities = Some(group.capabilities);
         changed = true;
     }
 
@@ -455,7 +455,7 @@ where
 
     if handle_state.states != Some(workspace.states) {
         instance.state(workspace.states);
-        handle_state.states = Some(workspace.states.clone());
+        handle_state.states = Some(workspace.states);
         changed = true;
     }
     // TODO ext_workspace_handle_v1::id

@@ -136,7 +136,7 @@ impl Animation {
             }
             | Animation::Unminimize {
                 target_geometry, ..
-            } => (MINIMIZE_ANIMATION_DURATION, target_geometry.clone()),
+            } => (MINIMIZE_ANIMATION_DURATION, *target_geometry),
             Animation::Tiled { .. } => {
                 let target_geometry = if let Some(target_rect) =
                     tiled_state.map(|state| state.relative_geometry(output_geometry, gaps))
@@ -148,7 +148,7 @@ impl Animation {
                 (ANIMATION_DURATION, target_geometry)
             }
         };
-        let previous_rect = self.previous_geometry().clone();
+        let previous_rect = *self.previous_geometry();
         let start = *self.start();
         let now = Instant::now();
         let progress =
@@ -292,7 +292,7 @@ impl FloatingLayout {
             .collect::<Vec<_>>()
             .into_iter()
         {
-            let tiled_state = mapped.floating_tiled.lock().unwrap().clone();
+            let tiled_state = *mapped.floating_tiled.lock().unwrap();
             if let Some(tiled_state) = tiled_state {
                 let geometry = tiled_state.relative_geometry(output_geometry, self.gaps());
                 self.map_internal(
@@ -364,7 +364,7 @@ impl FloatingLayout {
         }
         if mapped.floating_tiled.lock().unwrap().take().is_some() {
             if let Some(state) = mapped.maximized_state.lock().unwrap().as_mut() {
-                if let Some(real_old_geo) = mapped.last_geometry.lock().unwrap().clone() {
+                if let Some(real_old_geo) = *mapped.last_geometry.lock().unwrap() {
                     state.original_geometry = real_old_geo;
                 }
             };
@@ -388,7 +388,7 @@ impl FloatingLayout {
         let layers = layer_map_for_output(&output);
         let output_geometry = layers.non_exclusive_zone();
         mapped.set_bounds(output_geometry.size);
-        let last_geometry = mapped.last_geometry.lock().unwrap().clone();
+        let last_geometry = *mapped.last_geometry.lock().unwrap();
         let min_size = mapped.min_size().unwrap_or((320, 240).into());
 
         if let Some(size) = size
@@ -882,7 +882,7 @@ impl FloatingLayout {
     }
 
     pub fn stacking_indicator(&self) -> Option<Rectangle<i32, Local>> {
-        self.hovered_stack.as_ref().map(|(_, geo)| geo.clone())
+        self.hovered_stack.as_ref().map(|(_, geo)| *geo)
     }
 
     pub fn resize_request(
@@ -939,7 +939,7 @@ impl FloatingLayout {
         let Some(original_geo) = self.space.element_geometry(mapped) else {
             return false; // we don't have that window
         };
-        let mut geo = original_geo.clone();
+        let mut geo = original_geo;
 
         if edge.contains(ResizeEdge::RIGHT) || edge.contains(ResizeEdge::LEFT) {
             if direction == ResizeDirection::Inwards {
@@ -1316,8 +1316,7 @@ impl FloatingLayout {
                 mapped.set_geometry(geometry.to_global(&output));
                 geometry.loc
             } else {
-                prev.clone()
-                    .map(|rect| rect.loc.constrain(geometry))
+                prev.map(|rect| rect.loc.constrain(geometry))
                     .unwrap_or(Point::from((0, 0)))
             };
 
@@ -1546,7 +1545,7 @@ impl FloatingLayout {
 
             if focused == Some(elem) && !elem.is_maximized(false) {
                 if let Some((mode, resize)) = resize_indicator.as_mut() {
-                    let mut resize_geometry = geometry.clone();
+                    let mut resize_geometry = geometry;
                     resize_geometry.loc -= (18, 18).into();
                     resize_geometry.size += (36, 36).into();
 
