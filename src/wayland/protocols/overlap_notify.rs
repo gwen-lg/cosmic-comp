@@ -205,8 +205,8 @@ impl LayerOverlapNotificationDataInternal {
                 }
             }
         }
-        for (_, (identifier, namespace, exclusive, layer, overlap)) in
-            &self.last_snapshot.layer_overlaps
+        for (identifier, namespace, exclusive, layer, overlap) in
+            self.last_snapshot.layer_overlaps.values()
         {
             new_notification.layer_enter(
                 identifier.clone(),
