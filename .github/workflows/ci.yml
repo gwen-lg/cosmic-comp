@@ -30,18 +30,6 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-      - name: Check
-        if: $${{ always() }}
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --profile=test --all
-      - name: Clippy
-        if: $${{ always() }}
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --all-targets -- -D warnings $(cat .lints | cut -f1 -d"#" | tr '\n' ' ')
 
   test:
     runs-on: ubuntu-latest
@@ -78,6 +66,15 @@ jobs:
           meson -Dbuiltin=enabled -Dserver=disabled -Dexamples=disabled -Dman-pages=disabled build .
           ninja -C build
           sudo meson install -C build
+      - name: Check
+        if: $${{ always() }}
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --profile=test --all -- -D warnings
+      - name: Clippy
+        if: $${{ always() }}
+        run: cargo clippy --all-targets -- -D warnings
       - name: Test features
         uses: actions-rs/cargo@v1
         env:
