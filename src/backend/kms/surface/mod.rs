@@ -1059,7 +1059,7 @@ impl SurfaceThreadState {
             };
 
             if has_cursor_mode_none && self.mirroring.is_none() {
-                // TODO: use `extract_if` once stablized
+                // TODO: use `extract_if` once stabilized
                 let cursor_element_count = elements
                     .iter()
                     .take_while(|elem| elem.kind() == Kind::Cursor)

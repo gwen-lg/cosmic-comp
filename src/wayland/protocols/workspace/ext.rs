@@ -100,7 +100,7 @@ where
                     .ext_instances
                     .retain(|i| i != obj);
                 // without an instance, the whole send_group_to_client machinery doesn't work
-                // so there is no way for the whole clients hierachy to get any new events
+                // so there is no way for the whole clients hierarchy to get any new events
             }
             _ => {}
         }

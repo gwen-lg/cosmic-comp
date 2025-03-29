@@ -593,7 +593,7 @@ impl WorkspaceSet {
                     i > 0 && self.workspaces.get(i - 1).map_or(false, |w| w.is_empty());
                 let keep = if workspace.can_auto_remove(xdg_activation_state) {
                     // Keep empty workspace if it's active, or it's the last workspace,
-                    // and the previous worspace is not both active and empty.
+                    // and the previous workspace is not both active and empty.
                     i == self.active
                         || (i == len - 1 && !(i == self.active + 1 && previous_is_empty))
                 } else {
@@ -1212,7 +1212,7 @@ impl Common {
         }
 
         std::mem::drop(shell);
-        self.refresh(); // fixes indicies of any moved workspaces
+        self.refresh(); // fixes indices of any moved workspaces
     }
 
     pub fn remove_output(&mut self, output: &Output) {

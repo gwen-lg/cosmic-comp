@@ -1975,7 +1975,7 @@ impl TilingLayout {
 
                     match tree.get(node_id.unwrap()).unwrap().data() {
                         Data::Group { orientation, .. } if orientation == &main_orientation => {
-                            // if the group is layed out in the direction we care about,
+                            // if the group is laid out in the direction we care about,
                             // we can just use the first or last element (depending on the direction)
                             match direction {
                                 FocusDirection::Down | FocusDirection::Right => {
@@ -4287,7 +4287,7 @@ where
     let root = tree.root_node_id();
     let mut stack = Vec::new();
     if swap_tree.is_some() {
-        // push bogos value, that will get ignored anyway
+        // push bogus value, that will get ignored anyway
         stack.push((Rectangle::from_size((320, 240).into()), 0));
     }
     if root.is_some() {
