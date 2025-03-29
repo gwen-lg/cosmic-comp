@@ -1345,7 +1345,7 @@ impl TilingLayout {
                         // this group will be flattened
                         Some(MinimizedTilingState {
                             parent: None,
-                            sibling: parent.children().iter().cloned().find(|id| id != &node_id),
+                            sibling: parent.children().iter().find(|&id| id != &node_id).cloned(),
                             orientation: *orientation,
                             idx,
                             sizes: sizes.clone(),
