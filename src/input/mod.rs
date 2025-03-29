@@ -121,8 +121,7 @@ impl SupressedKeys {
         Some(
             removed
                 .into_iter()
-                .map(|(_, token)| token)
-                .flatten()
+                .filter_map(|(_, token)| token)
                 .collect::<Vec<_>>(),
         )
     }

@@ -98,13 +98,12 @@ impl OutputExt for Output {
     fn adaptive_sync_support(&self) -> Option<Support> {
         self.user_data()
             .get::<VrrSupport>()
-            .map(|vrr| match vrr.0.load(Ordering::SeqCst) {
+            .and_then(|vrr| match vrr.0.load(Ordering::SeqCst) {
                 0 => None,
                 2 => Some(Support::RequiresModeset),
                 3 => Some(Support::Supported),
                 _ => Some(Support::NotSupported),
             })
-            .flatten()
     }
 
     fn set_adaptive_sync_support(&self, vrr: Option<Support>) {

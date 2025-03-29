@@ -173,7 +173,7 @@ impl Shell {
         let focused_windows = self
             .seats
             .iter()
-            .map(|seat| {
+            .filter_map(|seat| {
                 if matches!(
                     seat.get_keyboard().unwrap().current_focus(),
                     Some(KeyboardFocusTarget::Group(_))
@@ -186,7 +186,6 @@ impl Shell {
                 let stack = space.focus_stack.get(seat);
                 stack.last().cloned()
             })
-            .flatten()
             .collect::<Vec<_>>();
 
         for output in self.outputs().cloned().collect::<Vec<_>>().into_iter() {
