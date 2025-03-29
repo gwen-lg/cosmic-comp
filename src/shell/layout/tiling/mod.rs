@@ -569,36 +569,34 @@ impl TilingLayout {
             } else {
                 tree.insert(new_window, InsertBehavior::AsRoot).unwrap()
             }
+        } else if let Some(ref node_id) = node {
+            let orientation = {
+                let window_size = tree.get(node_id).unwrap().data().geometry().size;
+                if window_size.w > window_size.h {
+                    Orientation::Vertical
+                } else {
+                    Orientation::Horizontal
+                }
+            };
+            let new_id = tree.insert(new_window, InsertBehavior::AsRoot).unwrap();
+            TilingLayout::new_group(tree, node_id, &new_id, orientation).unwrap();
+            new_id
         } else {
-            if let Some(ref node_id) = node {
+            // nothing? then we add to the root
+            if let Some(root_id) = tree.root_node_id().cloned() {
                 let orientation = {
-                    let window_size = tree.get(node_id).unwrap().data().geometry().size;
-                    if window_size.w > window_size.h {
+                    let output_size = output.geometry().size;
+                    if output_size.w > output_size.h {
                         Orientation::Vertical
                     } else {
                         Orientation::Horizontal
                     }
                 };
                 let new_id = tree.insert(new_window, InsertBehavior::AsRoot).unwrap();
-                TilingLayout::new_group(tree, node_id, &new_id, orientation).unwrap();
+                TilingLayout::new_group(tree, &root_id, &new_id, orientation).unwrap();
                 new_id
             } else {
-                // nothing? then we add to the root
-                if let Some(root_id) = tree.root_node_id().cloned() {
-                    let orientation = {
-                        let output_size = output.geometry().size;
-                        if output_size.w > output_size.h {
-                            Orientation::Vertical
-                        } else {
-                            Orientation::Horizontal
-                        }
-                    };
-                    let new_id = tree.insert(new_window, InsertBehavior::AsRoot).unwrap();
-                    TilingLayout::new_group(tree, &root_id, &new_id, orientation).unwrap();
-                    new_id
-                } else {
-                    tree.insert(new_window, InsertBehavior::AsRoot).unwrap()
-                }
+                tree.insert(new_window, InsertBehavior::AsRoot).unwrap()
             }
         };
 
@@ -5527,12 +5525,10 @@ where
                     .unwrap_or(false)
                 {
                     swap_elements.extend(elements);
+                } else if animating {
+                    animating_window_elements.extend(elements);
                 } else {
-                    if animating {
-                        animating_window_elements.extend(elements);
-                    } else {
-                        window_elements.extend(elements);
-                    }
+                    window_elements.extend(elements);
                 }
             }
         },

@@ -486,11 +486,9 @@ impl KmsState {
                     device.egl = Some(egl);
                 }
                 used_devices.insert(device.render_node);
-            } else {
-                if device.egl.is_some() {
-                    let _ = device.egl.take();
-                    self.api.as_mut().remove_node(&device.render_node);
-                }
+            } else if device.egl.is_some() {
+                let _ = device.egl.take();
+                self.api.as_mut().remove_node(&device.render_node);
             }
         }
 

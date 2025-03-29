@@ -106,16 +106,14 @@ impl ResizeSurfaceGrab {
                     new_window_width = self.initial_window_size.w - output_geom.loc.x
                         + self.initial_window_location.x;
                 }
-            } else {
-                if ((self.initial_window_location.x + self.initial_window_size.w + dx as i32
-                    - output_geom.loc.x
-                    - output_geom.size.w)
-                    .abs() as u32)
-                    < self.edge_snap_threshold
-                {
-                    new_window_width =
-                        output_geom.loc.x - self.initial_window_location.x + output_geom.size.w;
-                }
+            } else if ((self.initial_window_location.x + self.initial_window_size.w + dx as i32
+                - output_geom.loc.x
+                - output_geom.size.w)
+                .abs() as u32)
+                < self.edge_snap_threshold
+            {
+                new_window_width =
+                    output_geom.loc.x - self.initial_window_location.x + output_geom.size.w;
             }
         }
 
@@ -136,16 +134,14 @@ impl ResizeSurfaceGrab {
                     new_window_height = self.initial_window_size.h - output_geom.loc.y
                         + self.initial_window_location.y;
                 }
-            } else {
-                if ((self.initial_window_location.y + self.initial_window_size.h + dy as i32
-                    - output_geom.loc.y
-                    - output_geom.size.h)
-                    .abs() as u32)
-                    < self.edge_snap_threshold
-                {
-                    new_window_height =
-                        output_geom.loc.y - self.initial_window_location.y + output_geom.size.h;
-                }
+            } else if ((self.initial_window_location.y + self.initial_window_size.h + dy as i32
+                - output_geom.loc.y
+                - output_geom.size.h)
+                .abs() as u32)
+                < self.edge_snap_threshold
+            {
+                new_window_height =
+                    output_geom.loc.y - self.initial_window_location.y + output_geom.size.h;
             }
         }
 

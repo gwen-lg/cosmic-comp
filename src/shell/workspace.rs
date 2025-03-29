@@ -773,22 +773,17 @@ impl Workspace {
                         self.floating_layer
                             .map_maximized(window.window, previous_geometry, true);
                     }
+                } else if was_maximized {
+                    self.floating_layer.map_maximized(window.window, from, true);
                 } else {
-                    if was_maximized {
-                        self.floating_layer.map_maximized(window.window, from, true);
-                    } else {
-                        self.floating_layer.map(window.window.clone(), None);
-                        // get the right animation
-                        let geometry = self
-                            .floating_layer
-                            .element_geometry(&window.window)
-                            .unwrap();
-                        self.floating_layer.remap_minimized(
-                            window.window.clone(),
-                            from,
-                            geometry.loc,
-                        );
-                    }
+                    self.floating_layer.map(window.window.clone(), None);
+                    // get the right animation
+                    let geometry = self
+                        .floating_layer
+                        .element_geometry(&window.window)
+                        .unwrap();
+                    self.floating_layer
+                        .remap_minimized(window.window.clone(), from, geometry.loc);
                 }
             }
         }

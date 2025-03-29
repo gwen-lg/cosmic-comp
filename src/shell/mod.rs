@@ -1634,10 +1634,8 @@ impl Shell {
     pub fn close_focused(&self, focus_target: &KeyboardFocusTarget) {
         if let KeyboardFocusTarget::Group(_group) = focus_target {
             //TODO: decide if we want close actions to apply to groups
-        } else {
-            if let Some(mapped) = self.focused_element(focus_target) {
-                mapped.send_close();
-            }
+        } else if let Some(mapped) = self.focused_element(focus_target) {
+            mapped.send_close();
         }
     }
 
@@ -1883,24 +1881,21 @@ impl Shell {
                 }
                 self.overview_mode = OverviewMode::Started(trigger, Instant::now());
             }
-        } else {
-            if matches!(
-                self.overview_mode,
-                OverviewMode::Started(_, _) | OverviewMode::Active(_)
-            ) {
-                let (reverse_duration, trigger) =
-                    if let OverviewMode::Started(trigger, start) = self.overview_mode.clone() {
-                        (
-                            ANIMATION_DURATION
-                                - Instant::now().duration_since(start).min(ANIMATION_DURATION),
-                            Some(trigger),
-                        )
-                    } else {
-                        (Duration::ZERO, self.overview_mode.active_trigger().cloned())
-                    };
-                self.overview_mode =
-                    OverviewMode::Ended(trigger, Instant::now() - reverse_duration);
-            }
+        } else if matches!(
+            self.overview_mode,
+            OverviewMode::Started(_, _) | OverviewMode::Active(_)
+        ) {
+            let (reverse_duration, trigger) =
+                if let OverviewMode::Started(trigger, start) = self.overview_mode.clone() {
+                    (
+                        ANIMATION_DURATION
+                            - Instant::now().duration_since(start).min(ANIMATION_DURATION),
+                        Some(trigger),
+                    )
+                } else {
+                    (Duration::ZERO, self.overview_mode.active_trigger().cloned())
+                };
+            self.overview_mode = OverviewMode::Ended(trigger, Instant::now() - reverse_duration);
         }
     }
 
@@ -1941,12 +1936,10 @@ impl Shell {
                 evlh,
                 self.theme.clone(),
             ));
-        } else {
-            if let Some(direction) = self.resize_mode.active_direction() {
-                self.resize_mode = ResizeMode::Ended(Instant::now(), direction);
-                if let Some((_, direction, edge, _, _, _)) = self.resize_state.as_ref() {
-                    self.finish_resize(*direction, *edge);
-                }
+        } else if let Some(direction) = self.resize_mode.active_direction() {
+            self.resize_mode = ResizeMode::Ended(Instant::now(), direction);
+            if let Some((_, direction, edge, _, _, _)) = self.resize_state.as_ref() {
+                self.finish_resize(*direction, *edge);
             }
         }
     }

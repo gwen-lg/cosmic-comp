@@ -1864,22 +1864,20 @@ impl State {
                             new_workspace.refresh_focus_stack();
                         }
                     }
-                } else {
-                    if let Some(workspace) = spaces.find(|w| w.handle == new_descriptor.handle) {
-                        if let Some(focus) = TilingLayout::swap_trees(
-                            &mut workspace.tiling_layer,
-                            None,
-                            old_descriptor,
-                            &new_descriptor,
-                        ) {
-                            std::mem::drop(spaces);
-                            let seat = seat.clone();
-                            self.common.event_loop_handle.insert_idle(move |state| {
-                                Shell::set_focus(state, Some(&focus), &seat, None, true);
-                            });
-                        }
-                        workspace.refresh_focus_stack();
+                } else if let Some(workspace) = spaces.find(|w| w.handle == new_descriptor.handle) {
+                    if let Some(focus) = TilingLayout::swap_trees(
+                        &mut workspace.tiling_layer,
+                        None,
+                        old_descriptor,
+                        &new_descriptor,
+                    ) {
+                        std::mem::drop(spaces);
+                        let seat = seat.clone();
+                        self.common.event_loop_handle.insert_idle(move |state| {
+                            Shell::set_focus(state, Some(&focus), &seat, None, true);
+                        });
                     }
+                    workspace.refresh_focus_stack();
                 }
             }
         } else {
