@@ -3331,11 +3331,7 @@ impl Shell {
     }
 
     #[must_use]
-    pub fn move_current_element<'a>(
-        &mut self,
-        direction: Direction,
-        seat: &Seat<State>,
-    ) -> MoveResult {
+    pub fn move_current_element(&mut self, direction: Direction, seat: &Seat<State>) -> MoveResult {
         let Some(output) = seat.focused_output() else {
             return MoveResult::None;
         };
