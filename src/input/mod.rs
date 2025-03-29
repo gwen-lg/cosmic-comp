@@ -274,14 +274,14 @@ impl State {
             InputEvent::PointerMotion { event, .. } => {
                 use smithay::backend::input::PointerMotionEvent;
 
-                let mut shell = self.common.shell.write().unwrap();
+                let shell = self.common.shell.write().unwrap();
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let current_output = seat.active_output();
 
                     let mut position = seat.get_pointer().unwrap().current_location().as_global();
 
-                    let under = State::surface_under(position, &current_output, &mut *shell)
+                    let under = State::surface_under(position, &current_output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     let ptr = seat.get_pointer().unwrap();
@@ -325,7 +325,7 @@ impl State {
                         .cloned()
                         .unwrap_or(current_output.clone());
 
-                    let new_under = State::surface_under(position, &output, &mut *shell)
+                    let new_under = State::surface_under(position, &output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -590,7 +590,7 @@ impl State {
                     let under = State::surface_under(
                         position,
                         &output,
-                        &mut *self.common.shell.write().unwrap(),
+                        &*self.common.shell.write().unwrap(),
                     )
                     .map(|(target, pos)| (target, pos.as_logical()));
 
@@ -1186,7 +1186,7 @@ impl State {
             }
 
             InputEvent::TouchDown { event, .. } => {
-                let mut shell = self.common.shell.write().unwrap();
+                let shell = self.common.shell.write().unwrap();
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
@@ -1198,7 +1198,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &mut *shell)
+                    let under = State::surface_under(position, &output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1218,7 +1218,7 @@ impl State {
                 }
             }
             InputEvent::TouchMotion { event, .. } => {
-                let mut shell = self.common.shell.write().unwrap();
+                let shell = self.common.shell.write().unwrap();
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
@@ -1230,7 +1230,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &mut *shell)
+                    let under = State::surface_under(position, &output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1303,7 +1303,7 @@ impl State {
             }
 
             InputEvent::TabletToolAxis { event, .. } => {
-                let mut shell = self.common.shell.write().unwrap();
+                let shell = self.common.shell.write().unwrap();
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
@@ -1315,7 +1315,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &mut *shell)
+                    let under = State::surface_under(position, &output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);
@@ -1368,7 +1368,7 @@ impl State {
                 }
             }
             InputEvent::TabletToolProximity { event, .. } => {
-                let mut shell = self.common.shell.write().unwrap();
+                let shell = self.common.shell.write().unwrap();
                 if let Some(seat) = shell.seats.for_device(&event.device()).cloned() {
                     self.common.idle_notifier_state.notify_activity(&seat);
                     let Some(output) =
@@ -1380,7 +1380,7 @@ impl State {
 
                     let position =
                         transform_output_mapped_position(&output, &event, shell.zoom_state());
-                    let under = State::surface_under(position, &output, &mut *shell)
+                    let under = State::surface_under(position, &output, &*shell)
                         .map(|(target, pos)| (target, pos.as_logical()));
 
                     std::mem::drop(shell);

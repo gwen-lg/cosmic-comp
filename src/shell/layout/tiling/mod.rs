@@ -402,7 +402,7 @@ impl TilingLayout {
 
         let mut tree = self.queue.trees.back().unwrap().0.copy_clone();
         let last_active = focus_stack
-            .and_then(|focus_stack| TilingLayout::last_active_window(&mut tree, focus_stack))
+            .and_then(|focus_stack| TilingLayout::last_active_window(&tree, focus_stack))
             .map(|(node_id, _)| node_id);
         let duration = if minimize_rect.is_some() {
             MINIMIZE_ANIMATION_DURATION
@@ -1490,7 +1490,7 @@ impl TilingLayout {
         let Some(target) = seat.get_keyboard().unwrap().current_focus() else {
             return MoveResult::None;
         };
-        let Some((node_id, data)) = TilingLayout::currently_focused_node(&mut tree, target) else {
+        let Some((node_id, data)) = TilingLayout::currently_focused_node(&tree, target) else {
             return MoveResult::None;
         };
 

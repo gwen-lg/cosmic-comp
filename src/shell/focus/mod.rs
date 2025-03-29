@@ -583,8 +583,8 @@ fn update_pointer_focus(state: &mut State, seat: &Seat<State>) {
         let output = seat.active_output();
         let position = pointer.current_location().as_global();
 
-        let mut shell = state.common.shell.write().unwrap();
-        let under = State::surface_under(position, &output, &mut shell)
+        let shell = state.common.shell.write().unwrap();
+        let under = State::surface_under(position, &output, &shell)
             .map(|(target, pos)| (target, pos.as_logical()));
         drop(shell);
 

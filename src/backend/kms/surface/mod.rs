@@ -1444,13 +1444,13 @@ impl SurfaceThreadState {
                                     .collect::<Vec<_>>();
 
                                 if let Some(tex) = pre_postprocess_data.texture.as_mut() {
-                                    let mut tex_fb = renderer.bind(tex).map_err(RenderError::<<GlMultiRenderer as RendererSuper>::Error>::Rendering)?;
+                                    let tex_fb = renderer.bind(tex).map_err(RenderError::<<GlMultiRenderer as RendererSuper>::Error>::Rendering)?;
 
                                     if let Some(fb) = fb.as_mut() {
                                         for rect in adjusted.iter().copied() {
                                             renderer
                                                 .blit(
-                                                    &mut tex_fb,
+                                                    &tex_fb,
                                                     fb,
                                                     rect,
                                                     rect,
