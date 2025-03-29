@@ -366,9 +366,9 @@ impl XwmHandler for State {
             .find(|pending| pending.surface.x11_surface() == Some(&surface))
             .map(|pending| pending.surface.clone())
         {
-            if !shell
+            if let std::collections::hash_map::Entry::Vacant(entry) = shell
                 .pending_activations
-                .contains_key(&crate::shell::ActivationKey::X11(surface.window_id()))
+                .entry(crate::shell::ActivationKey::X11(surface.window_id()))
             {
                 if let Some(startup_id) = window.x11_surface().and_then(|x| x.startup_id()) {
                     if let Some(context) = self
@@ -377,10 +377,7 @@ impl XwmHandler for State {
                         .data_for_token(&XdgActivationToken::from(startup_id))
                         .and_then(|data| data.user_data.get::<ActivationContext>())
                     {
-                        shell.pending_activations.insert(
-                            crate::shell::ActivationKey::X11(surface.window_id()),
-                            *context,
-                        );
+                        entry.insert(*context);
                     }
                 }
             }
