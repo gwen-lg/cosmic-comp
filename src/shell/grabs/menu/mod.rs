@@ -381,7 +381,7 @@ impl Program for ContextMenu {
             .row_width
             .lock()
             .unwrap()
-            .map(|size| Length::Fixed(size))
+            .map(Length::Fixed)
             .unwrap_or(Length::Shrink);
         let mode = match width {
             Length::Shrink => Length::Shrink,

@@ -407,9 +407,7 @@ impl BackendData {
     ) -> Result<Option<DrmNode>, anyhow::Error> {
         match self {
             BackendData::Kms(ref mut state) => {
-                return state
-                    .dmabuf_imported(client, global, dmabuf)
-                    .map(|node| Some(node))
+                return state.dmabuf_imported(client, global, dmabuf).map(Some)
             }
             BackendData::Winit(ref mut state) => {
                 state.backend.renderer().import_dmabuf(&dmabuf, None)?;
@@ -816,7 +814,7 @@ impl Common {
             if let Some(lock_surface) = session_lock.surfaces.get(output) {
                 if let Some(feedback) =
                     advertised_node_for_surface(lock_surface.wl_surface(), &self.display_handle)
-                        .and_then(|source| dmabuf_feedback(source))
+                        .and_then(&mut dmabuf_feedback)
                 {
                     send_dmabuf_feedback_surface_tree(
                         lock_surface.wl_surface(),
@@ -848,7 +846,7 @@ impl Common {
                             .and_then(|wl_surface| {
                                 advertised_node_for_surface(&wl_surface, &self.display_handle)
                             })
-                            .and_then(|source| dmabuf_feedback(source))
+                            .and_then(&mut dmabuf_feedback)
                         {
                             window.send_dmabuf_feedback(
                                 output,
@@ -876,7 +874,7 @@ impl Common {
                         .and_then(|wl_surface| {
                             advertised_node_for_surface(&wl_surface, &self.display_handle)
                         })
-                        .and_then(|source| dmabuf_feedback(source))
+                        .and_then(&mut dmabuf_feedback)
                     {
                         window.send_dmabuf_feedback(
                             output,
@@ -896,7 +894,7 @@ impl Common {
                         .and_then(|wl_surface| {
                             advertised_node_for_surface(&wl_surface, &self.display_handle)
                         })
-                        .and_then(|source| dmabuf_feedback(source))
+                        .and_then(&mut dmabuf_feedback)
                     {
                         window.send_dmabuf_feedback(
                             output,
@@ -913,7 +911,7 @@ impl Common {
             if let Some(wl_surface) = or.wl_surface() {
                 if let Some(feedback) =
                     advertised_node_for_surface(&wl_surface, &self.display_handle)
-                        .and_then(|source| dmabuf_feedback(source))
+                        .and_then(&mut dmabuf_feedback)
                 {
                     send_dmabuf_feedback_surface_tree(
                         &wl_surface,
@@ -936,7 +934,7 @@ impl Common {
         for layer_surface in map.layers() {
             if let Some(feedback) =
                 advertised_node_for_surface(layer_surface.wl_surface(), &self.display_handle)
-                    .and_then(|source| dmabuf_feedback(source))
+                    .and_then(&mut dmabuf_feedback)
             {
                 layer_surface.send_dmabuf_feedback(
                     output,

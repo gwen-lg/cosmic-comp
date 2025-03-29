@@ -1456,7 +1456,7 @@ impl TilingLayout {
                         &other_child,
                         parent_parent_id
                             .as_ref()
-                            .map(|parent_id| MoveBehavior::ToParent(parent_id))
+                            .map(MoveBehavior::ToParent)
                             .unwrap_or(MoveBehavior::ToRoot),
                     )
                     .unwrap();
@@ -3623,7 +3623,7 @@ impl TilingLayout {
                                     } => true,
                                     _ => false,
                                 })
-                                .map(|node_id| TargetZone::InitialPlaceholder(node_id))
+                                .map(TargetZone::InitialPlaceholder)
                                 .unwrap_or(TargetZone::Initial),
                         ));
                     }

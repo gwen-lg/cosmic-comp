@@ -526,7 +526,7 @@ impl Device {
             .outputs
             .get(&conn)
             .cloned()
-            .map(|output| Ok(output))
+            .map(Ok)
             .unwrap_or_else(|| create_output_for_conn(self.drm.device_mut(), conn))
             .context("Failed to create `Output`")?;
 
